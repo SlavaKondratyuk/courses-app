@@ -21,7 +21,6 @@ function Header() {
 				<p>{name}</p>
 				<Button name='Log out' clickHandler={LogData} />
 			</div>
-			<p className='p-class'></p>
 		</div>
 	);
 }
