@@ -13,7 +13,7 @@ class Button extends React.Component {
 
 	render() {
 		const { name } = this.props;
-		return <button>{name}</button>;
+		return <button onClick={this.clickHandler}>{name}</button>;
 	}
 }
 

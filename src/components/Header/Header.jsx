@@ -17,9 +17,9 @@ function Header() {
 			<div className='logo-wrapper'>
 				<Logo />
 			</div>
-			<div>
+			<div className='button-wrapper'>
 				<p>{name}</p>
-				<Button name='Log out' clickHandler={LogData} />
+				<Button name='Logout' clickHandler={LogData} />
 			</div>
 		</div>
 	);
