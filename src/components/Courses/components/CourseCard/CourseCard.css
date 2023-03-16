@@ -8,6 +8,7 @@
   border: 1px solid #add6a1;
   border-radius: 5px;
   box-sizing: border-box;
+  margin-top: 20px;
 }
 
 .card-item__description {

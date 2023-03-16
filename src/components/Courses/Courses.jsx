@@ -1,6 +1,7 @@
 import React from 'react';
 
 import CourseCard from './components/CourseCard/CourseCard';
+import SearchBar from './components/SearchBar/SearchBar';
 
 import {
 	mockedCoursesList,
@@ -16,6 +17,7 @@ class Courses extends React.Component {
 
 		return (
 			<div className='courses'>
+				<SearchBar />
 				{mockedCourses.map((course) => (
 					<CourseCard
 						key={course.id}

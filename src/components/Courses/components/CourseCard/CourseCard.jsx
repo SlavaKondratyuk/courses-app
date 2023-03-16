@@ -40,31 +40,29 @@ class CourseCard extends React.Component {
 		const { title, description, duration, created, deleteHandler } = this.props;
 		return (
 			<div className='course-card'>
-				<>
-					<div className='card-item__description'>
-						<div className='course-card__title'>{title}</div>
-						<div className='course-card__description'>
-							<p>{description}</p>
-						</div>
+				<div className='card-item__description'>
+					<div className='course-card__title'>{title}</div>
+					<div className='course-card__description'>
+						<p>{description}</p>
 					</div>
-					<div className='card-item__data'>
-						<div className='course-card__authors'>
-							<span className='bold'>Authors: </span>
-							{this.findAuthors().length > 30
-								? this.findAuthors().substring(0, 30 - 3) + '...'
-								: this.findAuthors()}
-						</div>
-						<div className='course-card__duration'>
-							<span className='bold'>Duration: </span>
-							{this.minutesToHours(duration)}
-						</div>
-						<div className='course-card__duration'>
-							<span className='bold'>Created: </span>
-							{created}
-						</div>
-						<Button name='Show Course' clickHandler={deleteHandler} />
+				</div>
+				<div className='card-item__data'>
+					<div className='course-card__authors'>
+						<span className='bold'>Authors: </span>
+						{this.findAuthors().length > 30
+							? this.findAuthors().substring(0, 30 - 3) + '...'
+							: this.findAuthors()}
 					</div>
-				</>
+					<div className='course-card__duration'>
+						<span className='bold'>Duration: </span>
+						{this.minutesToHours(duration)}
+					</div>
+					<div className='course-card__duration'>
+						<span className='bold'>Created: </span>
+						{created}
+					</div>
+					<Button name='Show Course' clickHandler={deleteHandler} />
+				</div>
 			</div>
 		);
 	}

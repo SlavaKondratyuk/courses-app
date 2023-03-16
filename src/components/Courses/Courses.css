@@ -1,3 +1,7 @@
 .courses {
  width: 1280px;
 }
+
+.class-name__course-card {
+ margin-top: 20px;
+}
