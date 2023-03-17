@@ -14,8 +14,8 @@ class Input extends React.Component {
 	}
 
 	changeHandler = (event) => {
-		console.log(event.target.value);
 		this.setState({ value: event.target.value });
+		this.props.valueChangeHandler(event);
 	};
 
 	render() {

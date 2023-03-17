@@ -10,23 +10,73 @@ export default class SearchBar extends React.Component {
 		super(props);
 
 		this.state = {
-			search: '',
+			searchQuery: '',
 		};
 
 		this.searchHandler = this.searchHandler.bind(this);
+		this.fileterCourses = this.fileterCourses.bind(this);
 	}
 
 	searchHandler = (event) => {
-		console.log(event.target.value);
-		this.setState({ search: event.target.value });
+		this.setState({ searchQuery: event.target.value });
+
+		if (!event.target.value) {
+			this.props.updateCoursesList(event.target.value);
+		}
+	};
+
+	fileterCourses = () => {
+		console.log(this.state.searchQuery + ' this is from filterCourses');
+	};
+
+	filterById = (searchQuery) => {
+		if (!searchQuery) {
+			return;
+		}
+		const courses = this.props.courses;
+		const filteredCourses = courses.filter((course) =>
+			course.id.toLowerCase().includes(searchQuery.toLowerCase())
+		);
+
+		return filteredCourses;
+	};
+
+	filterByName = (searchQuery) => {
+		if (!searchQuery) {
+			return;
+		}
+
+		const courses = this.props.courses;
+		const filteredCourses = courses.filter((course) =>
+			course.title.toLowerCase().includes(searchQuery.toLowerCase())
+		);
+
+		return filteredCourses;
+	};
+
+	excludeCoursesDuplicates = (filteredByName, filterById) => {
+		const filteredCourses = [...filteredByName, ...filterById];
+		const excludeDuplicates = filteredCourses.filter(
+			(course, index, self) =>
+				index === self.findIndex((t) => t.id === course.id)
+		);
+
+		this.props.updateCoursesList(excludeDuplicates);
 	};
 
 	render() {
-		const { search } = this.state;
 		return (
 			<div className='search-bar'>
-				<Input name={search} onChange={this.searchHandler} />
-				<Button name='Search' clickHandler={() => console.log('Search')} />
+				<Input valueChangeHandler={this.searchHandler} />
+				<Button
+					name='Search'
+					clickHandler={() =>
+						this.excludeCoursesDuplicates(
+							this.filterByName(this.state.searchQuery),
+							this.filterById(this.state.searchQuery)
+						)
+					}
+				/>
 			</div>
 		);
 	}

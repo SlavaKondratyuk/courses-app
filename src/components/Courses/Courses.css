@@ -1,7 +1,13 @@
 .courses {
  width: 1280px;
+ margin-top: 20px;
 }
 
 .class-name__course-card {
  margin-top: 20px;
+}
+
+.search-bar__wrapper {
+ display: flex;
+ justify-content: space-between;
 }
