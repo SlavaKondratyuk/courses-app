@@ -36,7 +36,9 @@ class Courses extends React.Component {
 	}
 
 	coursesDisplayHandler = () => {
-		this.setState({ displayCourses: !this.state.displayCourses });
+		this.setState({ displayCourses: !this.state.displayCourses }, () => {
+			console.log(this.state.authors);
+		});
 	};
 
 	render() {
@@ -75,7 +77,7 @@ class Courses extends React.Component {
 			return (
 				<CreateCourse
 					name='Create Course'
-					authors={mockedAuthors}
+					courseAuthors={mockedAuthors}
 					clickHandler={this.coursesDisplayHandler}
 				/>
 			);
