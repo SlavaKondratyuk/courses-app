@@ -5,22 +5,8 @@ import Button from '../../../common/Button/Button';
 import './AuthorsList.css';
 
 class AuthorsList extends React.Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			authorsList: [],
-		};
-
-		this.unpdateStateAuthors = this.unpdateStateAuthors.bind(this);
-	}
-
-	componentDidMount() {
-		this.unpdateStateAuthors();
-	}
-
-	unpdateStateAuthors = () => {
-		this.setState({ authorsList: this.props.authors });
+	addAuthor = (author) => {
+		this.props.addAuthor(author);
 	};
 
 	render() {
@@ -31,7 +17,11 @@ class AuthorsList extends React.Component {
 				{authors.map((author) => (
 					<div key={author.id} className='author__wrapper'>
 						<p>{author.name}</p>
-						<Button className='add-author__btn' name='Add Author' />
+						<Button
+							className='add-author__btn'
+							name='Add Author'
+							clickHandler={() => this.addAuthor(author)}
+						/>
 					</div>
 				))}
 			</div>

@@ -20,15 +20,20 @@ class Courses extends React.Component {
 			courses: mockedCoursesList,
 			authors: mockedAuthorsList,
 			displayCourses: true,
+			createdCoures: [],
 		};
 
 		this.updateCoursesList = this.updateCoursesList.bind(this);
 		this.coursesDisplayHandler = this.coursesDisplayHandler.bind(this);
+		this.updateAuthorsList = this.updateAuthorsList.bind(this);
+		this.addNewCourse = this.addNewCourse.bind(this);
 	}
 
 	updateCoursesList(filteredCourses) {
 		if (!filteredCourses) {
-			this.setState({ courses: mockedCoursesList });
+			this.setState({
+				courses: [...mockedCoursesList, ...this.state.createdCoures],
+			});
 			return;
 		}
 
@@ -36,14 +41,21 @@ class Courses extends React.Component {
 	}
 
 	coursesDisplayHandler = () => {
-		this.setState({ displayCourses: !this.state.displayCourses }, () => {
-			console.log(this.state.authors);
-		});
+		this.setState({ displayCourses: !this.state.displayCourses });
+	};
+
+	addNewCourse = (course) => {
+		this.setState({ courses: [...this.state.courses, course] });
+		this.setState({ createdCoures: [...this.state.createdCoures, course] });
+	};
+
+	updateAuthorsList = (author) => {
+		this.setState({ authors: author });
 	};
 
 	render() {
 		const mockedCourses = this.state.courses;
-		const mockedAuthors = this.state.authors;
+		// const mockedAuthors = this.state.authors;
 
 		if (this.state.displayCourses) {
 			return (
@@ -67,7 +79,7 @@ class Courses extends React.Component {
 							authors={course.authors}
 							duration={course.duration}
 							created={course.created}
-							mockedAuthors={mockedAuthors}
+							mockedAuthors={this.state.authors}
 							deleteHandler={() => console.log('Delete')}
 						/>
 					))}
@@ -77,8 +89,10 @@ class Courses extends React.Component {
 			return (
 				<CreateCourse
 					name='Create Course'
-					courseAuthors={mockedAuthors}
+					courseAuthors={this.state.authors}
+					updateAuthors={this.updateAuthorsList}
 					clickHandler={this.coursesDisplayHandler}
+					createCourse={this.addNewCourse}
 				/>
 			);
 		}

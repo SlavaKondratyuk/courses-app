@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
 import AuthorsList from './components/AddAuthor/AuthorsList';
+import CourseAuthors from './components/AddAuthor/CourseAuthors/CourseAuthors';
 
 import './CreateCourse.css';
 
@@ -15,30 +16,50 @@ class CreateCourse extends React.Component {
 			title: '',
 			description: '',
 			duration: '',
-			authors: [],
 			courseAuthors: [],
 			author: '',
 		};
 
-		this.createCourseStateHandler = this.createCourseStateHandler.bind(this);
+		this.createCourse = this.createCourse.bind(this);
 		this.titleHandler = this.titleHandler.bind(this);
 		this.descriptionHandler = this.descriptionHandler.bind(this);
 		this.authorHandler = this.authorHandler.bind(this);
-		this.addAuthor = this.addAuthor.bind(this);
 		this.durationHandler = this.durationHandler.bind(this);
+		this.minutesToHours = this.minutesToHours.bind(this);
+		this.generateAuthor = this.generateAuthor.bind(this);
+		// this.updateStateAuthors = this.updateStateAuthors.bind(this);
+		this.updateAuthors = this.updateAuthors.bind(this);
+		this.deleteAuthorfromCourse = this.deleteAuthorfromCourse.bind(this);
+		this.addAuthorToCourse = this.addAuthorToCourse.bind(this);
+		this.allDataFilled = this.allDataFilled.bind(this);
+		this.getNewCourseData = this.getNewCourseData.bind(this);
+		this.createCourse = this.createCourse.bind(this);
 	}
 
-	componentDidMount() {
-		this.unpdateStateAuthors();
-	}
-
-	unpdateStateAuthors = () => {
-		this.setState({ authors: this.props.courseAuthors }, () => {
-			console.log(this.state.authors, 'authors');
-		});
+	allDataFilled = () => {
+		const { title, description, duration, courseAuthors } = this.state;
+		return title && description && duration && courseAuthors.length > 0;
 	};
 
-	createCourseStateHandler = () => {
+	getNewCourseData = () => {
+		const { title, description, duration, courseAuthors } = this.state;
+		const newCourse = {
+			id: uuidv4(),
+			title,
+			description,
+			duration: duration,
+			authors: courseAuthors,
+		};
+		return newCourse;
+	};
+
+	createCourse = () => {
+		if (!this.allDataFilled()) {
+			alert('Please fill all fields');
+			return;
+		}
+
+		this.props.createCourse(this.getNewCourseData());
 		this.props.clickHandler();
 	};
 
@@ -54,12 +75,6 @@ class CreateCourse extends React.Component {
 		this.setState({ author: event.target.value });
 	};
 
-	addAuthor = () => {
-		const authors = this.state.authors;
-		authors.push(this.state.author);
-		this.setState({ authors });
-	};
-
 	durationHandler = (event) => {
 		this.setState({ duration: event.target.value });
 	};
@@ -72,9 +87,35 @@ class CreateCourse extends React.Component {
 		}`;
 	};
 
+	generateAuthor = () => {
+		const author = {
+			id: uuidv4(),
+			name: this.state.author,
+		};
+		return author;
+	};
+
+	updateAuthors = () => {
+		if (this.state.author === '') return;
+
+		this.props.updateAuthors([
+			...this.props.courseAuthors,
+			this.generateAuthor(),
+		]);
+	};
+
+	deleteAuthorfromCourse = (id) => {
+		const updatedAuthors = this.state.courseAuthors.filter(
+			(author) => author.id !== id
+		);
+		this.setState({ courseAuthors: updatedAuthors });
+	};
+
+	addAuthorToCourse = (author) => {
+		this.setState({ courseAuthors: [...this.state.courseAuthors, author] });
+	};
+
 	render() {
-		const { name } = this.props;
-		const { authors } = this.state;
 		return (
 			<div className='create-course__wrapper'>
 				<div className='header__wrapper'>
@@ -87,10 +128,7 @@ class CreateCourse extends React.Component {
 							valueChangeHandler={this.titleHandler}
 						/>
 					</div>
-					<Button
-						name='Back to Courses'
-						clickHandler={this.createCourseStateHandler}
-					/>
+					<Button name='Create Course' clickHandler={this.createCourse} />
 				</div>
 				<div className='description__wrapper'>
 					<label htmlFor='description'>Description</label>
@@ -112,16 +150,19 @@ class CreateCourse extends React.Component {
 								value={this.state.author}
 								valueChangeHandler={this.authorHandler}
 							/>
-							<Button name='Create Author' clickHandler={this.addAuthor} />
+							<Button name='Create Author' clickHandler={this.updateAuthors} />
 						</div>
 					</div>
 					<div className='add-course__tile'>
-						<AuthorsList authors={this.state.authors} />
+						<AuthorsList
+							authors={this.props.courseAuthors}
+							addAuthor={this.addAuthorToCourse}
+						/>
 					</div>
 					<div className='add-course__tile'>
 						<h2>Duration</h2>
 						<div className='course-duration__wrapper'>
-							<label htmlFor='hours'>Hours</label>
+							<label htmlFor='hours'>Minutes</label>
 							<Input
 								name='hours'
 								value={this.state.duration}
@@ -135,12 +176,10 @@ class CreateCourse extends React.Component {
 					</div>
 					<div className='add-course__tile'>
 						<h2>Course Authors</h2>
-						{this.state.courseAuthors.map((author) => (
-							<div key={author.id} className='course-author__wrapper'>
-								<p>{author.name}</p>
-								<Button className='add-author__btn' name='Delete Author' />
-							</div>
-						))}
+						<CourseAuthors
+							authors={this.state.courseAuthors}
+							deleteAuthor={this.deleteAuthorfromCourse}
+						/>
 					</div>
 				</div>
 			</div>
