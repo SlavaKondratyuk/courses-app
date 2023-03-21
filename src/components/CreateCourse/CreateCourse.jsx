@@ -63,20 +63,20 @@ class CreateCourse extends React.Component {
 		this.props.clickHandler();
 	};
 
-	titleHandler = (event) => {
-		this.setState({ title: event.target.value });
+	titleHandler = (value) => {
+		this.setState({ title: value });
 	};
 
-	descriptionHandler = (event) => {
-		this.setState({ description: event.target.value });
+	descriptionHandler = (value) => {
+		this.setState({ description: value });
 	};
 
-	authorHandler = (event) => {
-		this.setState({ author: event.target.value });
+	authorHandler = (value) => {
+		this.setState({ author: value });
 	};
 
-	durationHandler = (event) => {
-		this.setState({ duration: event.target.value });
+	durationHandler = (value) => {
+		this.setState({ duration: value });
 	};
 
 	minutesToHours = (minutes) => {

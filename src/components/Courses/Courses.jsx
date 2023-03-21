@@ -55,7 +55,6 @@ class Courses extends React.Component {
 
 	render() {
 		const mockedCourses = this.state.courses;
-		// const mockedAuthors = this.state.authors;
 
 		if (this.state.displayCourses) {
 			return (

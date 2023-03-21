@@ -17,11 +17,11 @@ export default class SearchBar extends React.Component {
 		this.fileterCourses = this.fileterCourses.bind(this);
 	}
 
-	searchHandler = (event) => {
-		this.setState({ searchQuery: event.target.value });
+	searchHandler = (value) => {
+		this.setState({ searchQuery: value });
 
-		if (!event.target.value) {
-			this.props.updateCoursesList(event.target.value);
+		if (!value) {
+			this.props.updateCoursesList(value);
 		}
 	};
 

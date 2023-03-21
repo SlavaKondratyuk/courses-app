@@ -3,7 +3,7 @@ import React from 'react';
 import Header from './components/Header/Header';
 
 import './App.css';
-import Courses from './components/Courses/Courses';
+import Main from './components/Main';
 
 function App() {
 	return (
@@ -12,7 +12,7 @@ function App() {
 				<Header />
 			</div>
 			<div>
-				<Courses />
+				<Main />
 			</div>
 		</div>
 	);
