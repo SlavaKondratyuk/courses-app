@@ -1,5 +1,6 @@
 import { React, useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 import Input from '../common/Input/Input';
 
@@ -10,10 +11,25 @@ export default function Registration() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
+	let result = '';
 
-	function onRegister(e) {
+	async function onRegister(e) {
 		e.preventDefault();
-		console.log(name, email, password, confirmPassword);
+		debugger;
+		const newUser = {
+			name: 'name',
+			email: 'email',
+			password: 'password',
+		};
+
+		const response = await axios.post('http://localhost:4000/register', {
+			method: 'POST',
+			body: newUser,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		result = await response.json();
 	}
 
 	return (

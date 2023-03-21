@@ -73,6 +73,7 @@ class Courses extends React.Component {
 					{mockedCourses.map((course) => (
 						<CourseCard
 							key={course.id}
+							id={course.id}
 							title={course.title}
 							description={course.description}
 							authors={course.authors}
