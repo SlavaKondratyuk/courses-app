@@ -34,6 +34,8 @@ class CreateCourse extends React.Component {
 		this.allDataFilled = this.allDataFilled.bind(this);
 		this.getNewCourseData = this.getNewCourseData.bind(this);
 		this.createCourse = this.createCourse.bind(this);
+		this.deleteAuthorfromAuthorsList =
+			this.deleteAuthorfromAuthorsList.bind(this);
 	}
 
 	allDataFilled = () => {
@@ -109,10 +111,23 @@ class CreateCourse extends React.Component {
 			(author) => author.id !== id
 		);
 		this.setState({ courseAuthors: updatedAuthors });
+
+		const returnAuthor = this.state.courseAuthors.find(
+			(author) => author.id === id
+		);
+		this.props.updateAuthors([...this.props.courseAuthors, returnAuthor]);
 	};
 
 	addAuthorToCourse = (author) => {
 		this.setState({ courseAuthors: [...this.state.courseAuthors, author] });
+		this.deleteAuthorfromAuthorsList(author.id);
+	};
+
+	deleteAuthorfromAuthorsList = (id) => {
+		const updatedAuthors = this.props.courseAuthors.filter(
+			(author) => author.id !== id
+		);
+		this.props.updateAuthors(updatedAuthors);
 	};
 
 	render() {
