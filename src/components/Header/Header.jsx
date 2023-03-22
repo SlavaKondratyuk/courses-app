@@ -1,16 +1,17 @@
-import React from 'react';
+import { React, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import Logo from './components/Logo/Logo';
-import Button from '../common/Button/Button';
 
 import './Header.css';
 
-function LogData() {
-	console.log('Log out');
-}
+export default function Header(props) {
+	const name = localStorage.getItem('name');
 
-function Header() {
-	const name = 'Dave';
+	function Lagaut() {
+		localStorage.removeItem('name');
+		localStorage.removeItem('loginToken');
+	}
 
 	return (
 		<div className='header'>
@@ -18,11 +19,11 @@ function Header() {
 				<Logo />
 			</div>
 			<div className='button-wrapper'>
-				<p>{name}</p>
-				<Button name='Logout' clickHandler={LogData} />
+				<p>{props.name}</p>
+				<Link name='Logout' onClick={Lagaut}>
+					Log Out
+				</Link>
 			</div>
 		</div>
 	);
 }
-
-export default Header;

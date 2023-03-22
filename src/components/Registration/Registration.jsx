@@ -1,5 +1,5 @@
 import { React, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import Input from '../common/Input/Input';
@@ -11,7 +11,7 @@ export default function Registration() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
-	let result = '';
+	const navigate = useNavigate();
 
 	async function onRegister(e) {
 		e.preventDefault();
@@ -35,12 +35,13 @@ export default function Registration() {
 			},
 		})
 			.then((res) => {
-				console.log(res.data.successful);
+				if (res.data.successful) {
+					navigate('/login');
+				}
 			})
 			.catch((err) => {
 				console.log(err);
 			});
-		// result = await response.json();
 	}
 
 	return (
