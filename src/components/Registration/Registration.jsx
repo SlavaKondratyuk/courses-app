@@ -15,21 +15,32 @@ export default function Registration() {
 
 	async function onRegister(e) {
 		e.preventDefault();
-		debugger;
+
+		if (password !== confirmPassword) {
+			alert('Passwords do not match');
+			return;
+		}
 		const newUser = {
-			name: 'name',
-			email: 'email',
-			password: 'password',
+			name,
+			email,
+			password,
 		};
 
-		const response = await axios.post('http://localhost:4000/register', {
-			method: 'POST',
-			body: newUser,
+		const response = await axios({
+			method: 'post',
+			url: 'http://localhost:4000/register',
+			data: JSON.stringify(newUser),
 			headers: {
 				'Content-Type': 'application/json',
 			},
-		});
-		result = await response.json();
+		})
+			.then((res) => {
+				console.log(res.data.successful);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+		// result = await response.json();
 	}
 
 	return (

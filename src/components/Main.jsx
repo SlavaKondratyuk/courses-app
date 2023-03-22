@@ -18,6 +18,7 @@ function Main() {
 			<Route path='/login' element={<Login />}></Route>
 			<Route path='/registration' element={<Registration />}></Route>
 			<Route path='/courses' element={<Courses />}></Route>
+			<Route path='/courses/add' element={<Courses />}></Route>
 			<Route path='/courses/:courseId' element={<CourseInfo />}></Route>
 		</Routes>
 	);
