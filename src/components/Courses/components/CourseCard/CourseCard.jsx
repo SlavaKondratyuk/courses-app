@@ -5,7 +5,7 @@ import Button from '../../../common/Button/Button';
 
 import './CourseCard.css';
 
-function CourseCard(props) {
+export default function CourseCard(props) {
 	const { title, description, duration, created } = props;
 	let navigate = useNavigate();
 
@@ -63,5 +63,3 @@ function CourseCard(props) {
 		</div>
 	);
 }
-
-export default CourseCard;

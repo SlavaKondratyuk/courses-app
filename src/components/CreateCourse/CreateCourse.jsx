@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import Button from '../common/Button/Button';
@@ -8,198 +8,160 @@ import CourseAuthors from './components/AddAuthor/CourseAuthors/CourseAuthors';
 
 import './CreateCourse.css';
 
-class CreateCourse extends React.Component {
-	constructor(props) {
-		super(props);
+export default function CreateCourse(props) {
+	const [title, setTitle] = useState('');
+	const [description, setDescription] = useState('');
+	const [duration, setDuration] = useState('');
+	const [courseAuthors, setCourseAuthors] = useState([]);
+	const [author, setAuthor] = useState('');
+	const [allAuthors, setAllAuthors] = useState(props.courseAuthors);
 
-		this.state = {
-			title: '',
-			description: '',
-			duration: '',
-			courseAuthors: [],
-			author: '',
-		};
-
-		this.createCourse = this.createCourse.bind(this);
-		this.titleHandler = this.titleHandler.bind(this);
-		this.descriptionHandler = this.descriptionHandler.bind(this);
-		this.authorHandler = this.authorHandler.bind(this);
-		this.durationHandler = this.durationHandler.bind(this);
-		this.minutesToHours = this.minutesToHours.bind(this);
-		this.generateAuthor = this.generateAuthor.bind(this);
-		// this.updateStateAuthors = this.updateStateAuthors.bind(this);
-		this.updateAuthors = this.updateAuthors.bind(this);
-		this.deleteAuthorfromCourse = this.deleteAuthorfromCourse.bind(this);
-		this.addAuthorToCourse = this.addAuthorToCourse.bind(this);
-		this.allDataFilled = this.allDataFilled.bind(this);
-		this.getNewCourseData = this.getNewCourseData.bind(this);
-		this.createCourse = this.createCourse.bind(this);
-		this.deleteAuthorfromAuthorsList =
-			this.deleteAuthorfromAuthorsList.bind(this);
+	function allDataFilled() {
+		return title && description && duration && courseAuthors.length > 0;
 	}
 
-	allDataFilled = () => {
-		const { title, description, duration, courseAuthors } = this.state;
-		return title && description && duration && courseAuthors.length > 0;
-	};
-
-	getNewCourseData = () => {
-		const { title, description, duration, courseAuthors } = this.state;
+	function getNewCourseData() {
 		const newCourse = {
 			id: uuidv4(),
 			title,
 			description,
-			duration: duration,
-			authors: courseAuthors,
+			duration,
+			creationDate: new Date().toLocaleDateString(),
+			authors: courseAuthors.map((author) => author.id),
 		};
 		return newCourse;
-	};
+	}
 
-	createCourse = () => {
-		if (!this.allDataFilled()) {
+	function createCourse() {
+		if (!allDataFilled()) {
 			alert('Please fill all fields');
 			return;
 		}
 
-		this.props.createCourse(this.getNewCourseData());
-		this.props.clickHandler();
-	};
+		props.createCourse(getNewCourseData());
+		props.clickHandler();
+	}
 
-	titleHandler = (value) => {
-		this.setState({ title: value });
-	};
+	function titleHandler(value) {
+		setTitle(value);
+	}
 
-	descriptionHandler = (value) => {
-		this.setState({ description: value });
-	};
+	function descriptionHandler(event) {
+		setDescription(event.target.value);
+	}
 
-	authorHandler = (value) => {
-		this.setState({ author: value });
-	};
+	function authorHandler(value) {
+		setAuthor(value);
+	}
 
-	durationHandler = (value) => {
-		this.setState({ duration: value });
-	};
+	function durationHandler(value) {
+		setDuration(value);
+	}
 
-	minutesToHours = (minutes) => {
+	function minutesToHours(minutes) {
 		const hours = Math.floor(minutes / 60);
 		const mins = minutes % 60;
 		return `${hours < 10 ? '0' + hours : hours}:${
 			mins < 10 ? '0' + mins : mins
 		}`;
-	};
+	}
 
-	generateAuthor = () => {
-		const author = {
+	function generateAuthor() {
+		const newAuthor = {
 			id: uuidv4(),
-			name: this.state.author,
+			name: author,
 		};
-		return author;
-	};
+		return newAuthor;
+	}
 
-	updateAuthors = () => {
-		if (this.state.author === '') return;
+	function updateAuthors() {
+		if (author === '') return;
+		const newAuthorList = [...allAuthors, generateAuthor()];
 
-		this.props.updateAuthors([
-			...this.props.courseAuthors,
-			this.generateAuthor(),
-		]);
-	};
+		props.updateAuthors(newAuthorList);
+		setAllAuthors(newAuthorList);
+	}
 
-	deleteAuthorfromCourse = (id) => {
-		const updatedAuthors = this.state.courseAuthors.filter(
-			(author) => author.id !== id
-		);
-		this.setState({ courseAuthors: updatedAuthors });
+	function deleteAuthorfromCourse(id) {
+		const updatedAuthors = courseAuthors.filter((author) => author.id !== id);
+		setCourseAuthors(updatedAuthors);
 
-		const returnAuthor = this.state.courseAuthors.find(
-			(author) => author.id === id
-		);
-		this.props.updateAuthors([...this.props.courseAuthors, returnAuthor]);
-	};
+		const returnAuthor = courseAuthors.find((author) => author.id === id);
+		setAllAuthors([...allAuthors, returnAuthor]);
+	}
 
-	addAuthorToCourse = (author) => {
-		this.setState({ courseAuthors: [...this.state.courseAuthors, author] });
-		this.deleteAuthorfromAuthorsList(author.id);
-	};
+	function addAuthorToCourse(author) {
+		setCourseAuthors([...courseAuthors, author]);
+		deleteAuthorfromAuthorsList(author.id);
+	}
 
-	deleteAuthorfromAuthorsList = (id) => {
-		const updatedAuthors = this.props.courseAuthors.filter(
-			(author) => author.id !== id
-		);
-		this.props.updateAuthors(updatedAuthors);
-	};
+	function deleteAuthorfromAuthorsList(id) {
+		const updatedAuthors = allAuthors.filter((author) => author.id !== id);
+		setAllAuthors(updatedAuthors);
+	}
 
-	render() {
-		return (
-			<div className='create-course__wrapper'>
-				<div className='header__wrapper'>
-					<div className='title__wrapper'>
-						<label htmlFor='title'>Title</label>
-						<Input
-							name='title'
-							value={this.state.title}
-							placeholder='Enter course title'
-							valueChangeHandler={this.titleHandler}
-						/>
-					</div>
-					<Button name='Create Course' clickHandler={this.createCourse} />
-				</div>
-				<div className='description__wrapper'>
-					<label htmlFor='description'>Description</label>
-					<textarea
-						name='description'
-						id='description'
-						value={this.state.description}
-						placeholder='Enter course description'
-						onChange={this.descriptionHandler}
+	return (
+		<div className='create-course__wrapper'>
+			<div className='header__wrapper'>
+				<div className='title__wrapper'>
+					<label htmlFor='title'>Title</label>
+					<Input
+						name='title'
+						value={title}
+						placeholder='Enter course title'
+						valueChangeHandler={titleHandler}
 					/>
 				</div>
-				<div className='course-data__wrapper'>
-					<div className='add-course__tile'>
-						<h3>Add Author</h3>
-						<div className='add-author__wrapper'>
-							<label htmlFor='author'>Author Name:</label>
-							<Input
-								name='author'
-								value={this.state.author}
-								valueChangeHandler={this.authorHandler}
-							/>
-							<Button name='Create Author' clickHandler={this.updateAuthors} />
-						</div>
-					</div>
-					<div className='add-course__tile'>
-						<AuthorsList
-							authors={this.props.courseAuthors}
-							addAuthor={this.addAuthorToCourse}
+				<Button name='Create Course' clickHandler={createCourse} />
+			</div>
+			<div className='description__wrapper'>
+				<label htmlFor='description'>Description</label>
+				<textarea
+					name='description'
+					id='description'
+					value={description}
+					placeholder='Enter course description'
+					onChange={descriptionHandler}
+				/>
+			</div>
+			<div className='course-data__wrapper'>
+				<div className='add-course__tile'>
+					<h3>Add Author</h3>
+					<div className='add-author__wrapper'>
+						<label htmlFor='author'>Author Name:</label>
+						<Input
+							name='author'
+							value={author}
+							valueChangeHandler={authorHandler}
 						/>
-					</div>
-					<div className='add-course__tile'>
-						<h2>Duration</h2>
-						<div className='course-duration__wrapper'>
-							<label htmlFor='hours'>Minutes</label>
-							<Input
-								name='hours'
-								value={this.state.duration}
-								valueChangeHandler={this.durationHandler}
-							/>
-						</div>
-						<p className='durationHopurs'>
-							Duration: <span>{this.minutesToHours(this.state.duration)}</span>{' '}
-							hours
-						</p>
-					</div>
-					<div className='add-course__tile'>
-						<h2>Course Authors</h2>
-						<CourseAuthors
-							authors={this.state.courseAuthors}
-							deleteAuthor={this.deleteAuthorfromCourse}
-						/>
+						<Button name='Create Author' clickHandler={updateAuthors} />
 					</div>
 				</div>
+				<div className='add-course__tile'>
+					<AuthorsList authors={allAuthors} addAuthor={addAuthorToCourse} />
+				</div>
+				<div className='add-course__tile'>
+					<h2>Duration</h2>
+					<div className='course-duration__wrapper'>
+						<label htmlFor='hours'>Minutes</label>
+						<Input
+							name='hours'
+							value={duration}
+							valueChangeHandler={durationHandler}
+						/>
+					</div>
+					<p className='durationHopurs'>
+						Duration: <span>{minutesToHours(duration)}</span> hours
+					</p>
+				</div>
+				<div className='add-course__tile'>
+					<h2>Course Authors</h2>
+					<CourseAuthors
+						authors={courseAuthors}
+						deleteAuthor={deleteAuthorfromCourse}
+					/>
+				</div>
 			</div>
-		);
-	}
+		</div>
+	);
 }
-
-export default CreateCourse;

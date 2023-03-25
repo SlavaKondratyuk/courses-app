@@ -1,4 +1,5 @@
-import React from 'react';
+import { React, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
@@ -12,91 +13,75 @@ import {
 import './Courses.css';
 import Button from '../common/Button/Button';
 
-class Courses extends React.Component {
-	constructor(props) {
-		super(props);
+export default function Courses(props) {
+	const pageToShow = props.addCourse ? false : true;
+	const [courses, setCourses] = useState(mockedCoursesList);
+	const [authors, setAuthors] = useState(mockedAuthorsList);
+	const [displayCourses, setDisplayCourses] = useState(pageToShow);
+	const [createdCoures, setCreatedCoures] = useState([]);
+	const navigate = useNavigate();
+	// this.state = {
+	// 	courses: mockedCoursesList,
+	// 	authors: mockedAuthorsList,
+	// 	displayCourses: true,
+	// 	createdCoures: [],
+	// };
 
-		this.state = {
-			courses: mockedCoursesList,
-			authors: mockedAuthorsList,
-			displayCourses: true,
-			createdCoures: [],
-		};
-
-		this.updateCoursesList = this.updateCoursesList.bind(this);
-		this.coursesDisplayHandler = this.coursesDisplayHandler.bind(this);
-		this.updateAuthorsList = this.updateAuthorsList.bind(this);
-		this.addNewCourse = this.addNewCourse.bind(this);
-	}
-
-	updateCoursesList(filteredCourses) {
+	function updateCoursesList(filteredCourses) {
 		if (!filteredCourses) {
-			this.setState({
-				courses: [...mockedCoursesList, ...this.state.createdCoures],
-			});
+			setCourses([...mockedCoursesList, ...createdCoures]);
 			return;
 		}
 
-		this.setState({ courses: filteredCourses });
+		setCourses(filteredCourses);
 	}
 
-	coursesDisplayHandler = () => {
-		this.setState({ displayCourses: !this.state.displayCourses });
-	};
+	function coursesDisplayHandler() {
+		displayCourses ? navigate('/courses/add') : navigate('/courses');
+		setDisplayCourses(!displayCourses);
+	}
 
-	addNewCourse = (course) => {
-		this.setState({ courses: [...this.state.courses, course] });
-		this.setState({ createdCoures: [...this.state.createdCoures, course] });
-	};
+	function addNewCourse(course) {
+		setCourses([...courses, course]);
+		setCreatedCoures([...createdCoures, course]);
+	}
 
-	updateAuthorsList = (author) => {
-		this.setState({ authors: author });
-	};
+	function updateAuthorsList(author) {
+		setAuthors(author);
+	}
 
-	render() {
-		const mockedCourses = this.state.courses;
-
-		if (this.state.displayCourses) {
-			return (
-				<div className='courses'>
-					<div className='search-bar__wrapper'>
-						<SearchBar
-							courses={mockedCourses}
-							updateCoursesList={this.updateCoursesList}
-						/>
-						<Button
-							name='Add New Course'
-							clickHandler={this.coursesDisplayHandler}
-						/>
-					</div>
-
-					{mockedCourses.map((course) => (
-						<CourseCard
-							key={course.id}
-							id={course.id}
-							title={course.title}
-							description={course.description}
-							authors={course.authors}
-							duration={course.duration}
-							created={course.created}
-							mockedAuthors={this.state.authors}
-							deleteHandler={() => console.log('Delete')}
-						/>
-					))}
+	if (displayCourses) {
+		return (
+			<div className='courses'>
+				<div className='search-bar__wrapper'>
+					<SearchBar courses={courses} updateCoursesList={updateCoursesList} />
+					<Button name='Add New Course' clickHandler={coursesDisplayHandler} />
 				</div>
-			);
-		} else {
-			return (
-				<CreateCourse
-					name='Create Course'
-					courseAuthors={this.state.authors}
-					updateAuthors={this.updateAuthorsList}
-					clickHandler={this.coursesDisplayHandler}
-					createCourse={this.addNewCourse}
-				/>
-			);
-		}
+
+				{courses.map((course) => (
+					<CourseCard
+						key={course.id}
+						id={course.id}
+						title={course.title}
+						description={course.description}
+						authors={course.authors}
+						duration={course.duration}
+						created={course.creationDate}
+						mockedAuthors={authors}
+						deleteHandler={() => console.log('Delete')}
+					/>
+				))}
+			</div>
+		);
+	} else {
+		return (
+			<CreateCourse
+				name='Create Course'
+				courseAuthors={authors}
+				updateAuthors={updateAuthorsList}
+				clickHandler={coursesDisplayHandler}
+				createCourse={addNewCourse}
+			/>
+		);
 	}
 }
-
-export default Courses;
