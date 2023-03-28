@@ -2,20 +2,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '../../../common/Button/Button';
+import minutesToHours from '../../../helpers/pipeDuration';
 
 import './CourseCard.css';
 
-export default function CourseCard(props) {
-	const { title, description, duration, created } = props;
+function CourseCard(props) {
+	const { title, description, duration, creationDate } = props;
 	let navigate = useNavigate();
-
-	function minutesToHours(minutes) {
-		const hours = Math.floor(minutes / 60);
-		const mins = minutes % 60;
-		return `${hours < 10 ? '0' + hours : hours}h ${
-			mins < 10 ? '0' + mins : mins
-		}m`;
-	}
 
 	function findAuthors() {
 		const authors = props.authors;
@@ -56,10 +49,14 @@ export default function CourseCard(props) {
 				</div>
 				<div className='course-card__duration'>
 					<span className='bold'>Created: </span>
-					{created}
+					{creationDate}
 				</div>
-				<Button name='Show Course' clickHandler={nav} />
+				<div className='btn-course'>
+					<Button name='Show Course' clickHandler={nav} />
+				</div>
 			</div>
 		</div>
 	);
 }
+
+export default CourseCard;

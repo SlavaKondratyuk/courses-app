@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Banana from '../../../../assets/angryBanana.png';
+import Banana from '../../../Header/components/Logo/angryBanana.png';
 
 import './Logo.css';
 

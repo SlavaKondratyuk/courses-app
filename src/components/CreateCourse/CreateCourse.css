@@ -1,18 +1,23 @@
 .create-course__wrapper {
 	display: flex;
 	flex-wrap: wrap;
-	width: 1280px;
+	align-content: flex-start;
+	width: 1260px;
+	height: 1000px;
 	margin: 0 auto;
+	padding: 0 20px;
+	background-color: #ffffff;
+	border: 1px solid #ef0202;
+
 }
 
 .header__wrapper {
 	display: flex;
 	justify-content: space-between;
-	align-items: flex end;
+	align-items: flex-end;
 	margin-bottom: 20px;
-	width: 1280px;
+	width: 1260px;
 	border-radius: 3px;
-	border: 1px solid #81a832;
 	padding: 10px;
 }
 
@@ -24,8 +29,10 @@
 }
 
 .description__wrapper textarea {
-	width: 1280px;
+	width: 1218px;
 	height: 80px;
+	padding: 20px;
+	margin-bottom: 20px;
 }
 
 .course-data__wrapper {
@@ -34,12 +41,21 @@
 	justify-content: space-evenly;
 	align-items: flex-start;
 	padding: 20px;
-	border: 1px solid #81a832;
 	width: 1280px;
+	border: 1px solid #000000;
 }
 
 .add-course__tile {
 	width: 48%;
+	display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: flex-end;
+    align-items: stretch;
+}
+
+.add-course__tile  p {
+	width: 300px;
 }
 
 .durationHopurs span {
@@ -51,3 +67,19 @@
 	flex-wrap: wrap;
 	align-items: center;
 }
+
+.durationHopurs {
+	font-size: 20px;
+}
+
+.btn-create-author {
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
+}
+
+.description {
+display: inline-block;
+padding: 10px 0px;
+}
+

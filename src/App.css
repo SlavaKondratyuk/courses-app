@@ -1,7 +1,12 @@
 .app {
-	display: flex;
-	justify-content: center;
-	flex-direction: column;
-	flex-wrap: wrap;
-	margin: 0 10%;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-content: center;
+}
+
+h2 {
+    margin: 0 auto;
+    padding: 20px 0;
 }

@@ -1,39 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import './Input.css';
 
-class Input extends React.Component {
-	constructor(props) {
-		super(props);
+export default function Input(props) {
+	const [inputvalue, setInputvalue] = useState('');
 
-		this.state = {
-			value: '',
-		};
-
-		this.changeHandler = this.changeHandler.bind(this);
+	function changeHandler(event) {
+		setInputvalue(event.target.value);
+		props.valueChangeHandler(event.target.value);
 	}
 
-	changeHandler = (event) => {
-		this.setState({ value: event.target.value });
-		this.props.valueChangeHandler(event.target.value);
-	};
-
-	render() {
-		const { name } = this.props;
-		const { value } = this.state;
-		return (
-			<div>
-				<input
-					className='form-control'
-					name={name}
-					id={name}
-					value={value}
-					placeholder='Enter search text'
-					onChange={this.changeHandler}
-				/>
-			</div>
-		);
-	}
+	const { name } = props;
+	return (
+		<div>
+			<input
+				className='form-control'
+				name={name}
+				id={name}
+				value={inputvalue}
+				placeholder='Enter search text'
+				onChange={changeHandler}
+			/>
+		</div>
+	);
 }
-
-export default Input;

@@ -20,12 +20,6 @@ export default function Courses(props) {
 	const [displayCourses, setDisplayCourses] = useState(pageToShow);
 	const [createdCoures, setCreatedCoures] = useState([]);
 	const navigate = useNavigate();
-	// this.state = {
-	// 	courses: mockedCoursesList,
-	// 	authors: mockedAuthorsList,
-	// 	displayCourses: true,
-	// 	createdCoures: [],
-	// };
 
 	function updateCoursesList(filteredCourses) {
 		if (!filteredCourses) {
@@ -66,7 +60,7 @@ export default function Courses(props) {
 						description={course.description}
 						authors={course.authors}
 						duration={course.duration}
-						created={course.creationDate}
+						creationDate={course.creationDate}
 						mockedAuthors={authors}
 						deleteHandler={() => console.log('Delete')}
 					/>

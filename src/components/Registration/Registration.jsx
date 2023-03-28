@@ -2,7 +2,7 @@ import { React, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-import Input from '../common/Input/Input';
+import Input from '../common//Input/Input';
 
 import './Registration.css';
 

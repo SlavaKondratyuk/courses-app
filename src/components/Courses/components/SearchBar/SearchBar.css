@@ -3,14 +3,9 @@
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  align-items: flex-end;
 }
 
 .search-bar input {
   margin-right: 20px;
-}
-
-.search-bar button {
-  border: 1px solid #734c7a;
-  border-radius: 0.25rem;
-  padding: 14px 20px;
 }

@@ -1,10 +1,12 @@
-import { React, useState } from 'react';
+import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
 import AuthorsList from './components/AddAuthor/AuthorsList';
 import CourseAuthors from './components/AddAuthor/CourseAuthors/CourseAuthors';
+import MinutesToHours from '../.././components/helpers/pipeDuration';
+import DateGenerator from '../.././components/helpers/dateGenerator.js';
 
 import './CreateCourse.css';
 
@@ -26,7 +28,7 @@ export default function CreateCourse(props) {
 			title,
 			description,
 			duration,
-			creationDate: new Date().toLocaleDateString(),
+			creationDate: DateGenerator(),
 			authors: courseAuthors.map((author) => author.id),
 		};
 		return newCourse;
@@ -56,14 +58,6 @@ export default function CreateCourse(props) {
 
 	function durationHandler(value) {
 		setDuration(value);
-	}
-
-	function minutesToHours(minutes) {
-		const hours = Math.floor(minutes / 60);
-		const mins = minutes % 60;
-		return `${hours < 10 ? '0' + hours : hours}:${
-			mins < 10 ? '0' + mins : mins
-		}`;
 	}
 
 	function generateAuthor() {
@@ -115,7 +109,9 @@ export default function CreateCourse(props) {
 				<Button name='Create Course' clickHandler={createCourse} />
 			</div>
 			<div className='description__wrapper'>
-				<label htmlFor='description'>Description</label>
+				<label className='description' htmlFor='description'>
+					Description
+				</label>
 				<textarea
 					name='description'
 					id='description'
@@ -126,7 +122,7 @@ export default function CreateCourse(props) {
 			</div>
 			<div className='course-data__wrapper'>
 				<div className='add-course__tile'>
-					<h3>Add Author</h3>
+					<h2>Add Author</h2>
 					<div className='add-author__wrapper'>
 						<label htmlFor='author'>Author Name:</label>
 						<Input
@@ -134,7 +130,9 @@ export default function CreateCourse(props) {
 							value={author}
 							valueChangeHandler={authorHandler}
 						/>
-						<Button name='Create Author' clickHandler={updateAuthors} />
+						<div className='btn-create-author'>
+							<Button name='Create Author' clickHandler={updateAuthors} />
+						</div>
 					</div>
 				</div>
 				<div className='add-course__tile'>
@@ -151,7 +149,7 @@ export default function CreateCourse(props) {
 						/>
 					</div>
 					<p className='durationHopurs'>
-						Duration: <span>{minutesToHours(duration)}</span> hours
+						Duration: <span>{MinutesToHours(duration)}</span> hours
 					</p>
 				</div>
 				<div className='add-course__tile'>

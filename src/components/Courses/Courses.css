@@ -1,13 +1,17 @@
 .courses {
-	width: 100%;
-	margin-top: 20px;
+ width: 1260px;
+ border: 1px solid #01c9fb;
+ padding: 0 20px;
+ height: 1920px;
 }
 
 .class-name__course-card {
-	margin-top: 20px;
+ margin-top: 20px;
 }
 
 .search-bar__wrapper {
-	display: flex;
-	justify-content: space-between;
+ display: flex;
+ justify-content: space-between;
+ margin-top: 20px;
+ align-items: flex-end;
 }
