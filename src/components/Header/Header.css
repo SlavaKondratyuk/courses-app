@@ -25,3 +25,23 @@
     justify-content: space-around;
     width: 300px;
 }
+
+.link {
+  background-color: #ffffff;
+  border: 1px solid #c101fb;
+  color: #000000;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  height: 30px;
+  outline: none;
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+} 
+
+
+
+

@@ -1,8 +1,8 @@
-import { React, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-import Input from '../common//Input/Input';
+import Input from '../common/Input/Input';
 
 import './Registration.css';
 
@@ -13,7 +13,7 @@ export default function Registration() {
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const navigate = useNavigate();
 
-	async function onRegister(e) {
+	async function onRegister(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 
 		if (password !== confirmPassword) {
@@ -71,9 +71,9 @@ export default function Registration() {
 					id='confirmPassword'
 					valueChangeHandler={setConfirmPassword}
 				/>
-				<input type='submit' value='Register' />
+				<input className='btn-register' type='submit' value='Registration' />
 				<p>
-					Already have an account?{' '}
+					If you have an accaunt you can{' '}
 					<Link rel='stylesheet' to='/login'>
 						Login
 					</Link>

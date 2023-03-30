@@ -1,6 +1,28 @@
 .registration-wrapper {
-	width: 600px;
+	width: 100%;
+	height: 1000px;
 	margin: 0 auto;
 	display: flex;
 	flex-direction: column;
+	align-items: center;
+	background-color: #ffffff;
+	border: 1px solid #00ccf9;
+}
+
+.btn-register {
+	width: 200px;
+	height: 50px;
+	margin-left: 160px;
+	margin-top: 20px;
+	background-color: #ffffff;
+	border: 1px solid #e000f9;
+	color: #000000;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+label {
+padding: 20px 0;
+display: block;
+font-size: 25px;
 }

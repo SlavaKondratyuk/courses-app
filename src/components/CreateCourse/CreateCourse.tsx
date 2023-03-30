@@ -1,22 +1,34 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+
+import { Author } from '../interfaces/interfaces';
 
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
 import AuthorsList from './components/AddAuthor/AuthorsList';
 import CourseAuthors from './components/AddAuthor/CourseAuthors/CourseAuthors';
-import MinutesToHours from '../.././components/helpers/pipeDuration';
-import DateGenerator from '../.././components/helpers/dateGenerator.js';
+import MinutesToHours from '../helpers/pipeDuration';
+import DateGenerator from '../helpers/dateGenerator.js';
 
 import './CreateCourse.css';
 
-export default function CreateCourse(props) {
+type CreateProps = {
+	name: string;
+	courseAuthors: Author[];
+	createCourse: (course: any) => void;
+	updateAuthors: (authors: Author[]) => void;
+	clickHandler: () => void;
+};
+
+export default function CreateCourse(props: CreateProps) {
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [duration, setDuration] = useState('');
-	const [courseAuthors, setCourseAuthors] = useState([]);
+	const [courseAuthors, setCourseAuthors] = useState<Author[] | []>([]);
 	const [author, setAuthor] = useState('');
-	const [allAuthors, setAllAuthors] = useState(props.courseAuthors);
+	const [allAuthors, setAllAuthors] = useState<Author[] | []>(
+		props.courseAuthors
+	);
 
 	function allDataFilled() {
 		return title && description && duration && courseAuthors.length > 0;
@@ -44,19 +56,19 @@ export default function CreateCourse(props) {
 		props.clickHandler();
 	}
 
-	function titleHandler(value) {
-		setTitle(value);
-	}
-
-	function descriptionHandler(event) {
+	function descriptionHandler(event: React.ChangeEvent<HTMLTextAreaElement>) {
 		setDescription(event.target.value);
 	}
 
-	function authorHandler(value) {
+	function titleHandler(value: string) {
+		setTitle(value);
+	}
+
+	function authorHandler(value: string) {
 		setAuthor(value);
 	}
 
-	function durationHandler(value) {
+	function durationHandler(value: string) {
 		setDuration(value);
 	}
 
@@ -70,27 +82,29 @@ export default function CreateCourse(props) {
 
 	function updateAuthors() {
 		if (author === '') return;
-		const newAuthorList = [...allAuthors, generateAuthor()];
+		const newAuthorList: Author[] = [...allAuthors, generateAuthor()];
 
 		props.updateAuthors(newAuthorList);
 		setAllAuthors(newAuthorList);
 	}
 
-	function deleteAuthorfromCourse(id) {
+	function deleteAuthorfromCourse(id: string) {
 		const updatedAuthors = courseAuthors.filter((author) => author.id !== id);
 		setCourseAuthors(updatedAuthors);
 
 		const returnAuthor = courseAuthors.find((author) => author.id === id);
-		setAllAuthors([...allAuthors, returnAuthor]);
+		setAllAuthors([...allAuthors, returnAuthor as Author]);
 	}
 
-	function addAuthorToCourse(author) {
+	function addAuthorToCourse(author: Author) {
 		setCourseAuthors([...courseAuthors, author]);
 		deleteAuthorfromAuthorsList(author.id);
 	}
 
-	function deleteAuthorfromAuthorsList(id) {
-		const updatedAuthors = allAuthors.filter((author) => author.id !== id);
+	function deleteAuthorfromAuthorsList(id: string) {
+		const updatedAuthors = allAuthors.filter(
+			(author: Author) => author.id !== id
+		);
 		setAllAuthors(updatedAuthors);
 	}
 
@@ -104,6 +118,7 @@ export default function CreateCourse(props) {
 						value={title}
 						placeholder='Enter course title'
 						valueChangeHandler={titleHandler}
+						className='title-input'
 					/>
 				</div>
 				<Button name='Create Course' clickHandler={createCourse} />

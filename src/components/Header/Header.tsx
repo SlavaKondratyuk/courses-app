@@ -1,13 +1,11 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 
 import Logo from './components/Logo/Logo';
 
 import './Header.css';
 
-export default function Header(props) {
+export default function Header() {
 	const name = localStorage.getItem('name');
-
 	function Lagaut() {
 		localStorage.removeItem('name');
 		localStorage.removeItem('loginToken');
@@ -19,9 +17,9 @@ export default function Header(props) {
 				<Logo />
 			</div>
 			<div className='button-wrapper'>
-				<p>{props.name}</p>
-				<Link name='Logout' onClick={Lagaut}>
-					Log Out
+				<p>{name}</p>
+				<Link className='link' to='/login' onClick={Lagaut}>
+					<span className='span-login'>Log Out</span>
 				</Link>
 			</div>
 		</div>

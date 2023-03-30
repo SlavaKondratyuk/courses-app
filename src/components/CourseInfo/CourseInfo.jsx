@@ -24,14 +24,24 @@ export default function CourseInfo(props) {
 				{'<'} Back To Courses
 			</Link>
 			<h1>{filteredCourse.title}</h1>
-			<div>
-				<p>{filteredCourse.description}</p>
-			</div>
-			<div>
-				<p>Id: {filteredCourse.id}</p>
-				<p>Duration: {filteredCourse.duration}</p>
-				<p>Created: {filteredCourse.creationDate}</p>
-				<p>Authors: {authorsNames.join(', ')}</p>
+			<div className='info-div'>
+				<div className='info-description'>
+					<p>{filteredCourse.description}</p>
+				</div>
+				<div className='info-filteredCourse'>
+					<p>
+						<span>ID:</span> {filteredCourse.id}
+					</p>
+					<p>
+						<span>Duration:</span> {filteredCourse.duration}
+					</p>
+					<p>
+						<span>Created:</span> {filteredCourse.creationDate}
+					</p>
+					<p>
+						<span>Authors:</span> {authorsNames.join(', ')}
+					</p>
+				</div>
 			</div>
 		</div>
 	);

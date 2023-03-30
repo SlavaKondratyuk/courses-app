@@ -18,7 +18,7 @@ export default function Input(props) {
 				name={name}
 				id={name}
 				value={inputvalue}
-				placeholder='Enter search text'
+				placeholder='Enter text'
 				onChange={changeHandler}
 			/>
 		</div>

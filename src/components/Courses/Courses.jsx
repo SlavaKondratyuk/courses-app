@@ -5,10 +5,7 @@ import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
 import CreateCourse from '../CreateCourse/CreateCourse';
 
-import {
-	mockedCoursesList,
-	mockedAuthorsList,
-} from '../../assets/MockData/MockData';
+import { mockedCoursesList, mockedAuthorsList } from '../constants';
 
 import './Courses.css';
 import Button from '../common/Button/Button';

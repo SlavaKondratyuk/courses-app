@@ -1,18 +1,19 @@
-import { React, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-import Input from '../common//Input/Input';
+import Input from '../common/Input/Input';
 
 import '../common/Input/Input';
 
-export default function Login(props) {
+import './Login.css';
+
+export default function Login() {
 	const [email, setEmail] = useState('hello');
 	const [password, setPassword] = useState('');
-	const userName = props.userName;
 	const navigate = useNavigate();
 
-	async function onLogin(e) {
+	async function onLogin(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 
 		const usVer = {
@@ -32,7 +33,6 @@ export default function Login(props) {
 				console.log(res.data.successful);
 				localStorage.setItem('name', JSON.stringify(res.data.user.name));
 				localStorage.setItem('loginToken', JSON.stringify(res.data.result));
-				console.log(userName);
 				navigate('/courses');
 			})
 			.catch((err) => {
@@ -58,11 +58,11 @@ export default function Login(props) {
 					id='password'
 					valueChangeHandler={setPassword}
 				/>
-				<input type='submit' value='Submit' />
-				<p>
-					Don't have an account?{' '}
+				<input className='btn-submit' type='submit' value='Submit' />
+				<p className='p-registration'>
+					If you not have accaunt you can{' '}
 					<Link rel='stylesheet' to='/registration'>
-						Register
+						Registration
 					</Link>
 				</p>
 			</form>
