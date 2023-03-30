@@ -1,30 +1,38 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '../../../common/Button/Button';
 import minutesToHours from '../../../helpers/pipeDuration';
 
+import { Author, CourseInterface } from '../../../interfaces/interfaces';
+
 import './CourseCard.css';
 
-function CourseCard(props) {
+interface CourseCardProps extends CourseInterface {
+	mockedAuthors: Author[];
+}
+
+function CourseCard(props: CourseCardProps) {
 	const { title, description, duration, creationDate } = props;
 	let navigate = useNavigate();
 
-	function findAuthors() {
-		const authors = props.authors;
-		const mockedAuthors = props.mockedAuthors;
+	function findAuthors(): string {
+		const authors: string[] = props.authors;
+		const mockedAuthors: Author[] = props.mockedAuthors;
 
-		const authorsNames = mockedAuthors.reduce((acc, author) => {
-			if (authors.includes(author.id)) {
-				acc.push(author.name);
-			}
-			return acc;
-		}, []);
+		const authorsNames: string[] = mockedAuthors.reduce(
+			(acc: string[], author: Author) => {
+				if (authors.includes(author.id)) {
+					acc.push(author.name);
+				}
+				return acc;
+			},
+			[]
+		);
 
 		return authorsNames.join(', ');
 	}
 
-	function nav() {
+	function nav(): void {
 		navigate(props.id);
 	}
 

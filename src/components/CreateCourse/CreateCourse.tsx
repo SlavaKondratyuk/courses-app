@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Author } from '../interfaces/interfaces';
+import { Author, CourseInterface } from '../interfaces/interfaces';
 
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
@@ -21,20 +21,20 @@ type CreateProps = {
 };
 
 export default function CreateCourse(props: CreateProps) {
-	const [title, setTitle] = useState('');
-	const [description, setDescription] = useState('');
-	const [duration, setDuration] = useState('');
+	const [title, setTitle] = useState<string>('');
+	const [description, setDescription] = useState<string>('');
+	const [duration, setDuration] = useState<number>(0);
 	const [courseAuthors, setCourseAuthors] = useState<Author[] | []>([]);
-	const [author, setAuthor] = useState('');
+	const [author, setAuthor] = useState<string>('');
 	const [allAuthors, setAllAuthors] = useState<Author[] | []>(
 		props.courseAuthors
 	);
 
-	function allDataFilled() {
-		return title && description && duration && courseAuthors.length > 0;
+	function allDataFilled(): boolean {
+		return !!title && !!description && !!duration && courseAuthors.length > 0;
 	}
 
-	function getNewCourseData() {
+	function getNewCourseData(): CourseInterface {
 		const newCourse = {
 			id: uuidv4(),
 			title,
@@ -46,7 +46,7 @@ export default function CreateCourse(props: CreateProps) {
 		return newCourse;
 	}
 
-	function createCourse() {
+	function createCourse(): void {
 		if (!allDataFilled()) {
 			alert('Please fill all fields');
 			return;
@@ -56,23 +56,25 @@ export default function CreateCourse(props: CreateProps) {
 		props.clickHandler();
 	}
 
-	function descriptionHandler(event: React.ChangeEvent<HTMLTextAreaElement>) {
+	function descriptionHandler(
+		event: React.ChangeEvent<HTMLTextAreaElement>
+	): void {
 		setDescription(event.target.value);
 	}
 
-	function titleHandler(value: string) {
+	function titleHandler(value: string): void {
 		setTitle(value);
 	}
 
-	function authorHandler(value: string) {
+	function authorHandler(value: string): void {
 		setAuthor(value);
 	}
 
-	function durationHandler(value: string) {
-		setDuration(value);
+	function durationHandler(value: string): void {
+		setDuration(Number(value));
 	}
 
-	function generateAuthor() {
+	function generateAuthor(): Author {
 		const newAuthor = {
 			id: uuidv4(),
 			name: author,
@@ -80,7 +82,7 @@ export default function CreateCourse(props: CreateProps) {
 		return newAuthor;
 	}
 
-	function updateAuthors() {
+	function updateAuthors(): void {
 		if (author === '') return;
 		const newAuthorList: Author[] = [...allAuthors, generateAuthor()];
 
@@ -88,7 +90,7 @@ export default function CreateCourse(props: CreateProps) {
 		setAllAuthors(newAuthorList);
 	}
 
-	function deleteAuthorfromCourse(id: string) {
+	function deleteAuthorfromCourse(id: string): void {
 		const updatedAuthors = courseAuthors.filter((author) => author.id !== id);
 		setCourseAuthors(updatedAuthors);
 
@@ -96,12 +98,12 @@ export default function CreateCourse(props: CreateProps) {
 		setAllAuthors([...allAuthors, returnAuthor as Author]);
 	}
 
-	function addAuthorToCourse(author: Author) {
+	function addAuthorToCourse(author: Author): void {
 		setCourseAuthors([...courseAuthors, author]);
 		deleteAuthorfromAuthorsList(author.id);
 	}
 
-	function deleteAuthorfromAuthorsList(id: string) {
+	function deleteAuthorfromAuthorsList(id: string): void {
 		const updatedAuthors = allAuthors.filter(
 			(author: Author) => author.id !== id
 		);
@@ -115,10 +117,8 @@ export default function CreateCourse(props: CreateProps) {
 					<label htmlFor='title'>Title</label>
 					<Input
 						name='title'
-						value={title}
 						placeholder='Enter course title'
 						valueChangeHandler={titleHandler}
-						className='title-input'
 					/>
 				</div>
 				<Button name='Create Course' clickHandler={createCourse} />
@@ -140,11 +140,7 @@ export default function CreateCourse(props: CreateProps) {
 					<h2>Add Author</h2>
 					<div className='add-author__wrapper'>
 						<label htmlFor='author'>Author Name:</label>
-						<Input
-							name='author'
-							value={author}
-							valueChangeHandler={authorHandler}
-						/>
+						<Input name='author' valueChangeHandler={authorHandler} />
 						<div className='btn-create-author'>
 							<Button name='Create Author' clickHandler={updateAuthors} />
 						</div>
@@ -157,11 +153,7 @@ export default function CreateCourse(props: CreateProps) {
 					<h2>Duration</h2>
 					<div className='course-duration__wrapper'>
 						<label htmlFor='hours'>Minutes</label>
-						<Input
-							name='hours'
-							value={duration}
-							valueChangeHandler={durationHandler}
-						/>
+						<Input name='hours' valueChangeHandler={durationHandler} />
 					</div>
 					<p className='durationHopurs'>
 						Duration: <span>{MinutesToHours(duration)}</span> hours

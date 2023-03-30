@@ -1,11 +1,16 @@
-import React from 'react';
+import { Author } from '../../../interfaces/interfaces';
 
 import Button from '../../../common/Button/Button';
 
 import './AuthorsList.css';
 
-export default function AuthorsList(props) {
-	function addAuthor(author) {
+type AuthorListProps = {
+	authors: Author[];
+	addAuthor: (author: any) => void;
+};
+
+export default function AuthorsList(props: AuthorListProps) {
+	function addAuthor(author: Author) {
 		props.addAuthor(author);
 	}
 
@@ -15,11 +20,7 @@ export default function AuthorsList(props) {
 			{props.authors.map((author) => (
 				<div key={author.id} className='author__wrapper'>
 					<p>{author.name}</p>
-					<Button
-						className='add-author__btn'
-						name='Add Author'
-						clickHandler={() => addAuthor(author)}
-					/>
+					<Button name='Add Author' clickHandler={() => addAuthor(author)} />
 				</div>
 			))}
 		</div>

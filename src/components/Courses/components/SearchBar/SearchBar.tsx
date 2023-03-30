@@ -1,14 +1,21 @@
-import { React, useState } from 'react';
+import { useState } from 'react';
+
+import { CourseInterface } from '../../../interfaces/interfaces';
 
 import Input from '../../../common/Input/Input';
 import Button from '../../../common/Button/Button';
 
 import './SearchBar.css';
 
-export default function SearchBar(props) {
-	const [searchQuery, setSearchQuery] = useState('');
+type SearchBarProps = {
+	courses: CourseInterface[];
+	updateCoursesList: Function;
+};
 
-	function searchHandler(value) {
+export default function SearchBar(props: SearchBarProps) {
+	const [searchQuery, setSearchQuery] = useState<string>('');
+
+	function searchHandler(value: string): void {
 		setSearchQuery(value);
 
 		if (!value) {
@@ -16,7 +23,7 @@ export default function SearchBar(props) {
 		}
 	}
 
-	function filterById(searchQuery) {
+	function filterById(searchQuery: string): CourseInterface[] | [] | undefined {
 		if (!searchQuery) {
 			return;
 		}
@@ -28,7 +35,9 @@ export default function SearchBar(props) {
 		return filteredCourses;
 	}
 
-	function filterByName(searchQuery) {
+	function filterByName(
+		searchQuery: string
+	): CourseInterface[] | [] | undefined {
 		if (!searchQuery) {
 			return;
 		}
@@ -41,7 +50,10 @@ export default function SearchBar(props) {
 		return filteredCourses;
 	}
 
-	function excludeCoursesDuplicates(filteredByName, filterById) {
+	function excludeCoursesDuplicates(
+		filteredByName: CourseInterface[] | [] | undefined,
+		filterById: CourseInterface[] | [] | undefined
+	): void {
 		if (!searchQuery) return;
 
 		const byName = filteredByName ? filteredByName : [];
@@ -57,7 +69,7 @@ export default function SearchBar(props) {
 
 	return (
 		<div className='search-bar'>
-			<Input valueChangeHandler={searchHandler} />
+			<Input name='Search Bar' valueChangeHandler={searchHandler} />
 			<Button
 				name='Search'
 				clickHandler={() =>

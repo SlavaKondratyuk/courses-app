@@ -21,7 +21,7 @@ export default function Login() {
 			password,
 		};
 
-		const response = await axios({
+		await axios({
 			method: 'post',
 			url: 'http://localhost:4000/login',
 			data: JSON.stringify(usVer),
@@ -45,17 +45,11 @@ export default function Login() {
 			<h1>Login</h1>
 			<form action='' onSubmit={onLogin}>
 				<label htmlFor='email'>Email</label>
-				<Input
-					type='email'
-					name='email'
-					id='email'
-					valueChangeHandler={setEmail}
-				/>
+				<Input type='email' name='email' valueChangeHandler={setEmail} />
 				<label htmlFor='password'>Password</label>
 				<Input
 					type='password'
 					name='password'
-					id='password'
 					valueChangeHandler={setPassword}
 				/>
 				<input className='btn-submit' type='submit' value='Submit' />

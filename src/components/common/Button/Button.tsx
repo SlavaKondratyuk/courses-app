@@ -1,8 +1,11 @@
-import React from 'react';
-
 import './Button.css';
 
-export default function Button(props) {
+type ButtonProps = {
+	name: string;
+	clickHandler: () => void;
+};
+
+export default function Button(props: ButtonProps) {
 	const { name } = props;
 
 	function clickHandler() {

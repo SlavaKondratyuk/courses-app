@@ -1,10 +1,16 @@
-import React from 'react';
+import { Author } from '../../../../interfaces/interfaces';
 
 import Button from '../../../../common/Button/Button';
 
-export default function CourseAuthors(props) {
+type CourseAuthorsProps = {
+	authors: Author[];
+	deleteAuthor: (id: string) => void;
+};
+
+export default function CourseAuthors(props: CourseAuthorsProps) {
 	const { authors } = props;
-	function deleteAuthor(id) {
+
+	function deleteAuthor(id: string) {
 		props.deleteAuthor(id);
 	}
 

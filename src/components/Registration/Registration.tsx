@@ -26,7 +26,7 @@ export default function Registration() {
 			password,
 		};
 
-		const response = await axios({
+		await axios({
 			method: 'post',
 			url: 'http://localhost:4000/register',
 			data: JSON.stringify(newUser),
@@ -49,26 +49,19 @@ export default function Registration() {
 			<h1>Registration</h1>
 			<form action='' onSubmit={onRegister}>
 				<label htmlFor='name'>Name</label>
-				<Input type='text' name='name' id='name' valueChangeHandler={setName} />
+				<Input type='text' name='name' valueChangeHandler={setName} />
 				<label htmlFor='email'>Email</label>
-				<Input
-					type='email'
-					name='email'
-					id='email'
-					valueChangeHandler={setEmail}
-				/>
+				<Input type='email' name='email' valueChangeHandler={setEmail} />
 				<label htmlFor='password'>Password</label>
 				<Input
 					type='password'
 					name='password'
-					id='password'
 					valueChangeHandler={setPassword}
 				/>
 				<label htmlFor='confirmPassword'>Confirm Password</label>
 				<Input
 					type='password'
 					name='confirmPassword'
-					id='confirmPassword'
 					valueChangeHandler={setConfirmPassword}
 				/>
 				<input className='btn-register' type='submit' value='Registration' />

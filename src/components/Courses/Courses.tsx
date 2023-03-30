@@ -1,24 +1,33 @@
-import { React, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
 import CreateCourse from '../CreateCourse/CreateCourse';
-
-import { mockedCoursesList, mockedAuthorsList } from '../constants';
-
-import './Courses.css';
 import Button from '../common/Button/Button';
 
-export default function Courses(props) {
+import { mockedCoursesList, mockedAuthorsList } from '../constants';
+import { Author, CourseInterface } from '../interfaces/interfaces';
+
+import './Courses.css';
+
+type CoursesProps = {
+	addCourse: boolean;
+};
+
+export default function Courses(props: CoursesProps) {
 	const pageToShow = props.addCourse ? false : true;
-	const [courses, setCourses] = useState(mockedCoursesList);
-	const [authors, setAuthors] = useState(mockedAuthorsList);
-	const [displayCourses, setDisplayCourses] = useState(pageToShow);
-	const [createdCoures, setCreatedCoures] = useState([]);
+	const [courses, setCourses] = useState<CourseInterface[]>(mockedCoursesList);
+	const [authors, setAuthors] = useState<Author[]>(mockedAuthorsList);
+	const [displayCourses, setDisplayCourses] = useState<boolean>(pageToShow);
+	const [createdCoures, setCreatedCoures] = useState<CourseInterface[] | []>(
+		[]
+	);
 	const navigate = useNavigate();
 
-	function updateCoursesList(filteredCourses) {
+	function updateCoursesList(
+		filteredCourses: CourseInterface[] | undefined
+	): void {
 		if (!filteredCourses) {
 			setCourses([...mockedCoursesList, ...createdCoures]);
 			return;
@@ -27,17 +36,17 @@ export default function Courses(props) {
 		setCourses(filteredCourses);
 	}
 
-	function coursesDisplayHandler() {
+	function coursesDisplayHandler(): void {
 		displayCourses ? navigate('/courses/add') : navigate('/courses');
 		setDisplayCourses(!displayCourses);
 	}
 
-	function addNewCourse(course) {
+	function addNewCourse(course: CourseInterface): void {
 		setCourses([...courses, course]);
 		setCreatedCoures([...createdCoures, course]);
 	}
 
-	function updateAuthorsList(author) {
+	function updateAuthorsList(author: Author[]): void {
 		setAuthors(author);
 	}
 
@@ -59,7 +68,6 @@ export default function Courses(props) {
 						duration={course.duration}
 						creationDate={course.creationDate}
 						mockedAuthors={authors}
-						deleteHandler={() => console.log('Delete')}
 					/>
 				))}
 			</div>
