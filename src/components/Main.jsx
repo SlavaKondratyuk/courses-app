@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
-import { Routes, Route, BrowserRouter, Router } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import Login from './Login/Login';
 import Courses from './Courses/Courses';
 import Registration from './Registration/Registration';
-import CreateCourse from './CreateCourse/CreateCourse';
-import PageNotFound from './PageNotFound/PageNotFound';
+// import CreateCourse from './CreateCourse/CreateCourse';
+// import PageNotFound from './PageNotFound/PageNotFound';
 import CourseInfo from './CourseInfo/CourseInfo';
 import Header from './Header/Header';
 

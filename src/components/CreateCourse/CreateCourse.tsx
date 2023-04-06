@@ -10,11 +10,13 @@ import CourseAuthors from './components/AddAuthor/CourseAuthors/CourseAuthors';
 import MinutesToHours from '../helpers/pipeDuration';
 import DateGenerator from '../helpers/dateGenerator.js';
 
+import { addNewAuthor } from '../../store/authors/actionCreators';
+
 import './CreateCourse.css';
 
 type CreateProps = {
 	name: string;
-	courseAuthors: Author[];
+	courseAuthors: Author[] | [];
 	createCourse: (course: any) => void;
 	updateAuthors: (authors: Author[]) => void;
 	clickHandler: () => void;

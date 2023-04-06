@@ -8,7 +8,7 @@ import Button from '../../../common/Button/Button';
 import './SearchBar.css';
 
 type SearchBarProps = {
-	courses: CourseInterface[];
+	courses: CourseInterface[] | null;
 	updateCoursesList: Function;
 };
 
@@ -28,7 +28,7 @@ export default function SearchBar(props: SearchBarProps) {
 			return;
 		}
 		const courses = props.courses;
-		const filteredCourses = courses.filter((course) =>
+		const filteredCourses = courses?.filter((course) =>
 			course.id.toLowerCase().includes(searchQuery.toLowerCase())
 		);
 
@@ -43,7 +43,7 @@ export default function SearchBar(props: SearchBarProps) {
 		}
 
 		const courses = props.courses;
-		const filteredCourses = courses.filter((course) =>
+		const filteredCourses = courses?.filter((course) =>
 			course.title.toLowerCase().includes(searchQuery.toLowerCase())
 		);
 

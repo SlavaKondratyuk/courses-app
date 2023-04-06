@@ -1,10 +1,17 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+
+import { useAppDispatch } from '../../store/hooks';
+import {
+	nameUpdate,
+	emailUpdate,
+	tokenUpdate,
+	isAuthUpdate,
+} from '../../store/user/actionCreators';
 
 import Input from '../common/Input/Input';
 
-import '../common/Input/Input';
+import { LoginUser } from '../../services';
 
 import './Login.css';
 
@@ -12,6 +19,7 @@ export default function Login() {
 	const [email, setEmail] = useState('hello');
 	const [password, setPassword] = useState('');
 	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
 
 	async function onLogin(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
@@ -21,18 +29,16 @@ export default function Login() {
 			password,
 		};
 
-		await axios({
-			method: 'post',
-			url: 'http://localhost:4000/login',
-			data: JSON.stringify(usVer),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		})
+		LoginUser(usVer)
 			.then((res) => {
-				console.log(res.data.successful);
-				localStorage.setItem('name', JSON.stringify(res.data.user.name));
-				localStorage.setItem('loginToken', JSON.stringify(res.data.result));
+				localStorage.setItem('name', res.data.user.name);
+				localStorage.setItem('loginToken', res.data.result);
+				localStorage.setItem('isAuth', JSON.stringify(true));
+				localStorage.setItem('email', res.data.user.email);
+				dispatch(nameUpdate(res.data.user.name));
+				dispatch(emailUpdate(res.data.user.email));
+				dispatch(tokenUpdate(res.data.result));
+				dispatch(isAuthUpdate(true));
 				navigate('/courses');
 			})
 			.catch((err) => {

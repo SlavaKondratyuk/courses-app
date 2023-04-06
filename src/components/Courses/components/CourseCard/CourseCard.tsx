@@ -8,7 +8,7 @@ import { Author, CourseInterface } from '../../../interfaces/interfaces';
 import './CourseCard.css';
 
 interface CourseCardProps extends CourseInterface {
-	mockedAuthors: Author[];
+	mockedAuthors: Author[] | null;
 }
 
 function CourseCard(props: CourseCardProps) {
@@ -17,11 +17,11 @@ function CourseCard(props: CourseCardProps) {
 
 	function findAuthors(): string {
 		const authors: string[] = props.authors;
-		const mockedAuthors: Author[] = props.mockedAuthors;
+		const mockedAuthors: Author[] | null = props.mockedAuthors;
 
-		const authorsNames: string[] = mockedAuthors.reduce(
+		const authorsNames: string[] | undefined = mockedAuthors?.reduce(
 			(acc: string[], author: Author) => {
-				if (authors.includes(author.id)) {
+				if (authors?.includes(author.id)) {
 					acc.push(author.name);
 				}
 				return acc;
@@ -29,7 +29,7 @@ function CourseCard(props: CourseCardProps) {
 			[]
 		);
 
-		return authorsNames.join(', ');
+		return authorsNames?.join(', ') ? authorsNames.join(', ') : '';
 	}
 
 	function nav(): void {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { RegisterUser } from '../../services';
 
 import Input from '../common/Input/Input';
 
@@ -26,14 +26,7 @@ export default function Registration() {
 			password,
 		};
 
-		await axios({
-			method: 'post',
-			url: 'http://localhost:4000/register',
-			data: JSON.stringify(newUser),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		})
+		RegisterUser(newUser)
 			.then((res) => {
 				if (res.data.successful) {
 					navigate('/login');

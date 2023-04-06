@@ -1,14 +1,21 @@
 import { Link } from 'react-router-dom';
 
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
+import { nameUpdate } from '../../store/user/actionCreators';
+
 import Logo from './components/Logo/Logo';
 
 import './Header.css';
 
 export default function Header() {
-	const name = localStorage.getItem('name');
+	const name = useAppSelector((state) => state.user.name);
+	const dispatch = useAppDispatch();
 	function Lagaut() {
 		localStorage.removeItem('name');
 		localStorage.removeItem('loginToken');
+		localStorage.removeItem('email');
+		localStorage.removeItem('isAuth');
+		dispatch(nameUpdate('Guest'));
 	}
 
 	return (
