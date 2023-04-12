@@ -12,6 +12,8 @@ const api = {
 	register: '/register',
 	courses: '/courses/all',
 	authors: '/authors/all',
+	addNewCourse: '/courses/add',
+	addNewAuthor: '/authors/add',
 };
 
 const url = 'http://localhost:4000';
@@ -49,5 +51,28 @@ export async function GetAuthors() {
 	return await axios({
 		method: methods.get,
 		url: url + api.authors,
+	});
+}
+
+export function AddNewCourse(courseData) {
+	return axios({
+		method: methods.post,
+		url: url + api.addNewCourse,
+		data: courseData,
+		headers: {
+			Authorization: localStorage.getItem('loginToken'),
+		},
+	});
+}
+
+export function AddNewAuthor(authorData) {
+	return axios({
+		method: methods.post,
+		url: url + api.addNewAuthor,
+		data: JSON.stringify(authorData),
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: localStorage.getItem('loginToken'),
+		},
 	});
 }

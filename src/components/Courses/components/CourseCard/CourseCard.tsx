@@ -12,7 +12,7 @@ interface CourseCardProps extends CourseInterface {
 }
 
 function CourseCard(props: CourseCardProps) {
-	const { title, description, duration, creationDate } = props;
+	const { title, description, duration, creationDate, id } = props;
 	let navigate = useNavigate();
 
 	function findAuthors(): string {
@@ -33,7 +33,12 @@ function CourseCard(props: CourseCardProps) {
 	}
 
 	function nav(): void {
-		navigate(props.id);
+		navigate(id);
+	}
+
+	function deleteCourse(): void {
+		console.log('course deleted:' + ' ' + id);
+		// dispatch(deleteCourse(props.id));
 	}
 
 	return (
@@ -61,6 +66,7 @@ function CourseCard(props: CourseCardProps) {
 				</div>
 				<div className='btn-course'>
 					<Button name='Show Course' clickHandler={nav} />
+					<Button name='delte course' clickHandler={deleteCourse} />
 				</div>
 			</div>
 		</div>

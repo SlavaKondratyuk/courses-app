@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useAppDispatch } from '../../store/hooks';
@@ -20,6 +20,13 @@ export default function Login() {
 	const [password, setPassword] = useState('');
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		const isAuth = localStorage.getItem('isAuth');
+		if (isAuth) {
+			navigate('/courses');
+		}
+	}, []);
 
 	async function onLogin(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();

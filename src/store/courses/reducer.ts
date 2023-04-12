@@ -1,18 +1,20 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { CourseStateInterface } from './actionTypes';
 
+import { GetCourses } from '../../services';
+
 const initialState: CourseStateInterface = {
 	courses: [],
 	loading: false,
+	loaded: false,
 	error: null,
 };
 
 export const fetchCourses = createAsyncThunk(
 	'courses/fetchCourses',
 	async () => {
-		const response = await fetch('http://localhost:4000/courses/all');
-		const data = await response.json();
-		return data.result;
+		const response = await GetCourses();
+		return response.data.result;
 	}
 );
 
@@ -31,6 +33,9 @@ export const coursesSlice = createSlice({
 		},
 		initialiseCourses: (state, action) => {
 			state.courses = action.payload;
+		},
+		coursesLoaded: (state) => {
+			state.loaded = true;
 		},
 	},
 	extraReducers: (builder) => {

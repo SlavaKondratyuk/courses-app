@@ -22,7 +22,7 @@ export const authorsSlice = createSlice({
 	initialState,
 	reducers: {
 		addNewAuthor: (state, action) => {
-			state.authors = action.payload;
+			state.authors.push(action.payload);
 		},
 		deleteAuthor: (state, action) => {
 			const index = state.authors.findIndex(

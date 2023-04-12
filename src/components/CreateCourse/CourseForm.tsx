@@ -1,52 +1,68 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
 
-import { Author, CourseInterface } from '../interfaces/interfaces';
+import { Author, NewCourseInterface } from '../interfaces/interfaces';
 
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
 import AuthorsList from './components/AddAuthor/AuthorsList';
 import CourseAuthors from './components/AddAuthor/CourseAuthors/CourseAuthors';
+
 import MinutesToHours from '../helpers/pipeDuration';
 import DateGenerator from '../helpers/dateGenerator.js';
 
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
+import { addNewCourse } from '../../store/courses/actionCreators';
 import { addNewAuthor } from '../../store/authors/actionCreators';
 
-import './CreateCourse.css';
+import { AddNewCourse, AddNewAuthor } from '../../services';
 
-type CreateProps = {
-	name: string;
-	courseAuthors: Author[] | [];
-	createCourse: (course: any) => void;
-	updateAuthors: (authors: Author[]) => void;
-	clickHandler: () => void;
-};
+import './CourseForm.css';
 
-export default function CreateCourse(props: CreateProps) {
+export default function CreateCourse() {
+	const dispatch = useAppDispatch();
+	let fetchedAuthors = useAppSelector<Author[]>(
+		(state) => state.authors.authors
+	);
 	const [title, setTitle] = useState<string>('');
 	const [description, setDescription] = useState<string>('');
 	const [duration, setDuration] = useState<number>(0);
 	const [courseAuthors, setCourseAuthors] = useState<Author[] | []>([]);
 	const [author, setAuthor] = useState<string>('');
-	const [allAuthors, setAllAuthors] = useState<Author[] | []>(
-		props.courseAuthors
-	);
+	const [allAuthors, setAllAuthors] = useState<Author[] | []>([]);
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		setAllAuthors(fetchedAuthors);
+	}, [dispatch, fetchedAuthors]);
 
 	function allDataFilled(): boolean {
 		return !!title && !!description && !!duration && courseAuthors.length > 0;
 	}
 
-	function getNewCourseData(): CourseInterface {
+	function getNewCourseData(): NewCourseInterface {
 		const newCourse = {
-			id: uuidv4(),
 			title,
 			description,
 			duration,
-			creationDate: DateGenerator(),
 			authors: courseAuthors.map((author) => author.id),
 		};
 		return newCourse;
 	}
+
+	const dispatchNewCourse = useCallback(
+		async (course: NewCourseInterface): Promise<void> => {
+			const response = await AddNewCourse(course);
+			if (response.data.successful) {
+				dispatch(addNewCourse(course));
+				navigate('/courses');
+			} else {
+				alert('Something went wrong');
+			}
+		},
+		[dispatch]
+	);
 
 	function createCourse(): void {
 		if (!allDataFilled()) {
@@ -54,8 +70,7 @@ export default function CreateCourse(props: CreateProps) {
 			return;
 		}
 
-		props.createCourse(getNewCourseData());
-		props.clickHandler();
+		dispatchNewCourse(getNewCourseData());
 	}
 
 	function descriptionHandler(
@@ -84,12 +99,26 @@ export default function CreateCourse(props: CreateProps) {
 		return newAuthor;
 	}
 
-	function updateAuthors(): void {
-		if (author === '') return;
-		const newAuthorList: Author[] = [...allAuthors, generateAuthor()];
+	const dispatchNewAuthor = useCallback(
+		async (author: Author): Promise<void> => {
+			const response = await AddNewAuthor(author);
+			if (response.data.successful) {
+				dispatch(addNewAuthor(author));
+			} else {
+				alert('Something went wrong');
+			}
+		},
+		[dispatch]
+	);
 
-		props.updateAuthors(newAuthorList);
-		setAllAuthors(newAuthorList);
+	function createNewAuthor(): void {
+		if (author === '') {
+			alert('Please fill all fields');
+			return;
+		}
+		const newAuthor = generateAuthor();
+		dispatchNewAuthor(newAuthor);
+		setAuthor('');
 	}
 
 	function deleteAuthorfromCourse(id: string): void {
@@ -144,7 +173,7 @@ export default function CreateCourse(props: CreateProps) {
 						<label htmlFor='author'>Author Name:</label>
 						<Input name='author' valueChangeHandler={authorHandler} />
 						<div className='btn-create-author'>
-							<Button name='Create Author' clickHandler={updateAuthors} />
+							<Button name='Create Author' clickHandler={createNewAuthor} />
 						</div>
 					</div>
 				</div>

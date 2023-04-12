@@ -11,3 +11,10 @@ export declare interface CourseInterface {
 	duration: number;
 	authors: string[];
 }
+
+export declare interface NewCourseInterface {
+	title: string;
+	description: string;
+	duration: number;
+	authors: string[];
+}
