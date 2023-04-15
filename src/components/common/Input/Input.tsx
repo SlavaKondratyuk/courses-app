@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import './Input.css';
 
@@ -7,10 +7,16 @@ type InputProps = {
 	valueChangeHandler: Function;
 	type?: string;
 	placeholder?: string;
+	value?: string;
 };
 
 export default function Input(props: InputProps) {
-	const [inputvalue, setInputvalue] = useState('');
+	const { value } = props;
+	const [inputValue, setInputvalue] = useState('');
+
+	useEffect(() => {
+		value ? setInputvalue(value) : setInputvalue('');
+	}, [value]);
 
 	function changeHandler(event: React.ChangeEvent<HTMLInputElement>) {
 		setInputvalue(event.target.value);
@@ -21,7 +27,7 @@ export default function Input(props: InputProps) {
 			<input
 				className='form-control'
 				name={props.name}
-				value={inputvalue}
+				value={inputValue}
 				type={props.type || 'text'}
 				placeholder={props.placeholder || ''}
 				onChange={changeHandler}

@@ -54,3 +54,13 @@ export const mockedAuthorsList = [
 		name: 'Valentina Larina',
 	},
 ];
+
+export const appRoutes = {
+	home: '/',
+	login: '/login',
+	courses: '/courses',
+	regestration: '/regestration',
+	addCourse: '/courses/add',
+	updateCourse: '/courses/update/:courseId',
+	courseInfo: '/courses/:courseId',
+};

@@ -3,6 +3,7 @@ import './Button.css';
 type ButtonProps = {
 	name: string;
 	clickHandler: () => void;
+	className?: string;
 };
 
 export default function Button(props: ButtonProps) {
@@ -13,7 +14,12 @@ export default function Button(props: ButtonProps) {
 	}
 
 	return (
-		<button className='button_main' onClick={clickHandler}>
+		<button
+			className={
+				props.className ? 'button_main ' + props.className : 'button_main'
+			}
+			onClick={clickHandler}
+		>
 			{name}
 		</button>
 	);

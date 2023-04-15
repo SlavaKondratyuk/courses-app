@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect } from 'react';
 
 import { Routes, Route } from 'react-router-dom';
 
@@ -12,11 +12,16 @@ import Header from './Header/Header';
 
 import { fetchCoursesThunk } from '../store/courses/thunk';
 import { useAppDispatch } from '../store/hooks';
+import { CheckMe } from '../services';
+import { appRoutes } from './constants';
 
 function Main() {
 	const dispatch = useAppDispatch();
-	useState(() => {
+	useEffect(() => {
 		dispatch(fetchCoursesThunk());
+		CheckMe().then((res) => {
+			console.log(res);
+		});
 	});
 
 	return (
@@ -29,6 +34,7 @@ function Main() {
 				<Route path='/courses' element={<Courses addCourse={false} />}></Route>
 				<Route path='/courses/add' element={<CourseForm />}></Route>
 				<Route path='/courses/:courseId' element={<CourseInfo />}></Route>
+				<Route path={appRoutes.updateCourse} element={<CourseForm />}></Route>
 			</Routes>
 		</Fragment>
 	);

@@ -1,7 +1,9 @@
 import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
+import { useNavigate } from 'react-router-dom';
 
 import { CourseStateInterface } from './actionTypes';
+import { NewCourseInterface } from '../../components/interfaces/interfaces';
 import {
 	addNewCourse,
 	deleteCourse,
@@ -12,7 +14,7 @@ import {
 import { CourseInterface } from '../../components/interfaces/interfaces';
 import { RootState } from '../store';
 
-import { GetCourses } from '../../services';
+import { AddNewCourse, GetCourses } from '../../services';
 
 // Fetch courses from server
 export const fetchCoursesThunk =
@@ -31,16 +33,19 @@ export const fetchCoursesThunk =
 	};
 
 // Add a new course
-export const addNewCourseThunk =
-	(
-		course: CourseInterface
-	): ThunkAction<void, CourseStateInterface, unknown, Action<string>> =>
-	(dispatch) => {
-		dispatch({
-			type: 'courses/addNewCourse',
-			payload: course,
-		});
-	};
+// export const addNewCourseThunk =
+// 	(
+// 		newCourse: NewCourseInterface
+// 	): ThunkAction<void, CourseStateInterface, unknown, Action<string>> =>
+// 	(dispatch, getState) => {
+// 		try {
+// 			const response = AddNewCourse(newCourse);
+// 			const res = response.data.result;
+// 			dispatch(addNewCourse(res));
+// 		} catch (error) {
+// 			console.error(error);
+// 		}
+// 	};
 
 // Delete a course
 export const deleteCourseThunk =

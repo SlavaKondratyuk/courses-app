@@ -1,8 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { Author, NewCourseInterface } from '../interfaces/interfaces';
+import {
+	Author,
+	CourseInterface,
+	NewCourseInterface,
+} from '../interfaces/interfaces';
 
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
@@ -13,15 +17,24 @@ import MinutesToHours from '../helpers/pipeDuration';
 import DateGenerator from '../helpers/dateGenerator.js';
 
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import { addNewCourse } from '../../store/courses/actionCreators';
+import { addNewCourse, updateCourse } from '../../store/courses/actionCreators';
 import { addNewAuthor } from '../../store/authors/actionCreators';
 
-import { AddNewCourse, AddNewAuthor } from '../../services';
+import {
+	AddNewCourse,
+	AddNewAuthor,
+	UpdateCourseService,
+} from '../../services';
 
 import './CourseForm.css';
 
 export default function CreateCourse() {
+	const { courseId } = useParams();
+	// debugger;
 	const dispatch = useAppDispatch();
+	const fetchedCourse = useAppSelector<CourseInterface | undefined>((state) =>
+		state.courses.courses.find((course) => course.id === courseId)
+	);
 	let fetchedAuthors = useAppSelector<Author[]>(
 		(state) => state.authors.authors
 	);
@@ -35,10 +48,32 @@ export default function CreateCourse() {
 
 	useEffect(() => {
 		setAllAuthors(fetchedAuthors);
+
+		if (fetchedCourse) {
+			setTitle(fetchedCourse.title);
+			setDescription(fetchedCourse.description);
+			setDuration(fetchedCourse.duration);
+			setCourseAuthors(findCourseAuthors());
+			setAllAuthors(filterUsedAuthorsFromAllAuthors());
+		}
 	}, [dispatch, fetchedAuthors]);
 
 	function allDataFilled(): boolean {
 		return !!title && !!description && !!duration && courseAuthors.length > 0;
+	}
+
+	function findCourseAuthors(): Author[] {
+		const authors = fetchedAuthors.filter((author) =>
+			fetchedCourse?.authors.find((id) => id === author.id)
+		);
+		return authors;
+	}
+
+	function filterUsedAuthorsFromAllAuthors(): Author[] {
+		const authors = fetchedAuthors.filter(
+			(author) => !fetchedCourse?.authors.includes(author.id)
+		);
+		return authors;
 	}
 
 	function getNewCourseData(): NewCourseInterface {
@@ -141,18 +176,38 @@ export default function CreateCourse() {
 		setAllAuthors(updatedAuthors);
 	}
 
+	function putUpdatedCourse(): void {
+		if (!allDataFilled()) {
+			alert('Please fill all fields');
+			return;
+		}
+		const updatedCourse = { ...getNewCourseData(), id: courseId };
+		UpdateCourseService(courseId, updatedCourse).then((data) => {
+			if (!data.data.successful) {
+				alert('Something went wrong');
+				return;
+			}
+			dispatch(updateCourse(updatedCourse));
+			navigate('/courses');
+		});
+	}
+
 	return (
 		<div className='create-course__wrapper'>
 			<div className='header__wrapper'>
 				<div className='title__wrapper'>
 					<label htmlFor='title'>Title</label>
 					<Input
+						value={title}
 						name='title'
 						placeholder='Enter course title'
 						valueChangeHandler={titleHandler}
 					/>
 				</div>
-				<Button name='Create Course' clickHandler={createCourse} />
+				<Button
+					name={courseId ? 'Update Course' : 'Create Course'}
+					clickHandler={courseId ? putUpdatedCourse : createCourse}
+				/>
 			</div>
 			<div className='description__wrapper'>
 				<label className='description' htmlFor='description'>
@@ -184,7 +239,11 @@ export default function CreateCourse() {
 					<h2>Duration</h2>
 					<div className='course-duration__wrapper'>
 						<label htmlFor='hours'>Minutes</label>
-						<Input name='hours' valueChangeHandler={durationHandler} />
+						<Input
+							value={'' + duration}
+							name='hours'
+							valueChangeHandler={durationHandler}
+						/>
 					</div>
 					<p className='durationHopurs'>
 						Duration: <span>{MinutesToHours(duration)}</span> hours

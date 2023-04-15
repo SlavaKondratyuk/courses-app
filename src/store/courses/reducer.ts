@@ -37,6 +37,12 @@ export const coursesSlice = createSlice({
 		coursesLoaded: (state) => {
 			state.loaded = true;
 		},
+		updateCourse: (state, action) => {
+			const index = state.courses.findIndex(
+				(course) => course.id === action.payload.id
+			);
+			state.courses[index] = action.payload;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchCourses.pending, (state) => {

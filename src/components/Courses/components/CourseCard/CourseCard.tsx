@@ -41,6 +41,11 @@ function CourseCard(props: CourseCardProps) {
 		// dispatch(deleteCourse(props.id));
 	}
 
+	function editCourse(): void {
+		navigate('/courses/update/' + id);
+		// dispatch(deleteCourse(props.id));
+	}
+
 	return (
 		<div className='course-card'>
 			<div className='card-item__description'>
@@ -66,7 +71,12 @@ function CourseCard(props: CourseCardProps) {
 				</div>
 				<div className='btn-course'>
 					<Button name='Show Course' clickHandler={nav} />
-					<Button name='delte course' clickHandler={deleteCourse} />
+					<Button name='Delte Course' clickHandler={deleteCourse} />
+					<Button
+						className='className'
+						name='Edit Course'
+						clickHandler={editCourse}
+					/>
 				</div>
 			</div>
 		</div>
