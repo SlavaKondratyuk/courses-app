@@ -90,6 +90,16 @@ export function UpdateCourseService(courseId, courseData) {
 	});
 }
 
+export function DeleteCourseService(courseId) {
+	return axios({
+		method: methods.delete,
+		url: url + api.update + courseId,
+		headers: {
+			Authorization: localStorage.getItem('loginToken'),
+		},
+	});
+}
+
 export function CheckMe() {
 	const token = localStorage.getItem('loginToken');
 	return axios({

@@ -49,7 +49,7 @@ export default function CreateCourse() {
 	useEffect(() => {
 		setAllAuthors(fetchedAuthors);
 
-		if (fetchedCourse) {
+		if (courseId && fetchedCourse) {
 			setTitle(fetchedCourse.title);
 			setDescription(fetchedCourse.description);
 			setDuration(fetchedCourse.duration);

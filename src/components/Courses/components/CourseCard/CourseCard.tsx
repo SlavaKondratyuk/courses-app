@@ -5,7 +5,12 @@ import minutesToHours from '../../../helpers/pipeDuration';
 
 import { Author, CourseInterface } from '../../../interfaces/interfaces';
 
+import { DeleteCourseService } from '../../../../services';
+
+import { deleteCourse } from '../../../../store/courses/actionCreators';
+
 import './CourseCard.css';
+import { useAppDispatch } from '../../../../store/hooks';
 
 interface CourseCardProps extends CourseInterface {
 	mockedAuthors: Author[] | null;
@@ -13,6 +18,7 @@ interface CourseCardProps extends CourseInterface {
 
 function CourseCard(props: CourseCardProps) {
 	const { title, description, duration, creationDate, id } = props;
+	const dispatch = useAppDispatch();
 	let navigate = useNavigate();
 
 	function findAuthors(): string {
@@ -36,14 +42,18 @@ function CourseCard(props: CourseCardProps) {
 		navigate(id);
 	}
 
-	function deleteCourse(): void {
-		console.log('course deleted:' + ' ' + id);
-		// dispatch(deleteCourse(props.id));
+	function deleteCourseFromServer(): void {
+		DeleteCourseService(id).then((res) => {
+			if (res.status === 200) {
+				debugger;
+				dispatch(deleteCourse(id));
+				alert('Course deleted');
+			}
+		});
 	}
 
 	function editCourse(): void {
 		navigate('/courses/update/' + id);
-		// dispatch(deleteCourse(props.id));
 	}
 
 	return (
@@ -71,7 +81,7 @@ function CourseCard(props: CourseCardProps) {
 				</div>
 				<div className='btn-course'>
 					<Button name='Show Course' clickHandler={nav} />
-					<Button name='Delte Course' clickHandler={deleteCourse} />
+					<Button name='Delte Course' clickHandler={deleteCourseFromServer} />
 					<Button
 						className='className'
 						name='Edit Course'
