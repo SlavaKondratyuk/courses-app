@@ -10,7 +10,7 @@ import { DeleteCourseService } from '../../../../services';
 import { deleteCourse } from '../../../../store/courses/actionCreators';
 
 import './CourseCard.css';
-import { useAppDispatch } from '../../../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 
 interface CourseCardProps extends CourseInterface {
 	mockedAuthors: Author[] | null;
@@ -18,6 +18,7 @@ interface CourseCardProps extends CourseInterface {
 
 function CourseCard(props: CourseCardProps) {
 	const { title, description, duration, creationDate, id } = props;
+	const role = useAppSelector((state) => state.user.role);
 	const dispatch = useAppDispatch();
 	let navigate = useNavigate();
 
@@ -45,7 +46,6 @@ function CourseCard(props: CourseCardProps) {
 	function deleteCourseFromServer(): void {
 		DeleteCourseService(id).then((res) => {
 			if (res.status === 200) {
-				debugger;
 				dispatch(deleteCourse(id));
 				alert('Course deleted');
 			}
@@ -81,12 +81,19 @@ function CourseCard(props: CourseCardProps) {
 				</div>
 				<div className='btn-course'>
 					<Button name='Show Course' clickHandler={nav} />
-					<Button name='Delte Course' clickHandler={deleteCourseFromServer} />
-					<Button
-						className='className'
-						name='Edit Course'
-						clickHandler={editCourse}
-					/>
+					{role === 'admin' ? (
+						<div>
+							<Button
+								name='Delte Course'
+								clickHandler={deleteCourseFromServer}
+							/>
+							<Button
+								className='className'
+								name='Edit Course'
+								clickHandler={editCourse}
+							/>
+						</div>
+					) : null}
 				</div>
 			</div>
 		</div>

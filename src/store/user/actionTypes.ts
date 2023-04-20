@@ -3,4 +3,5 @@ export interface NameState {
 	email: string;
 	token: string;
 	isAuth: boolean;
+	role: string;
 }

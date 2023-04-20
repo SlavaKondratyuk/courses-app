@@ -59,7 +59,7 @@ export const appRoutes = {
 	home: '/',
 	login: '/login',
 	courses: '/courses',
-	regestration: '/regestration',
+	registration: '/registration',
 	addCourse: '/courses/add',
 	updateCourse: '/courses/update/:courseId',
 	courseInfo: '/courses/:courseId',

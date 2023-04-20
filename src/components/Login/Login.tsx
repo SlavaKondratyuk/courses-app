@@ -6,12 +6,12 @@ import {
 	nameUpdate,
 	emailUpdate,
 	tokenUpdate,
-	isAuthUpdate,
+	userUpdate,
 } from '../../store/user/actionCreators';
 
 import Input from '../common/Input/Input';
 
-import { LoginUser } from '../../services';
+import { LoginUser, CheckMe } from '../../services';
 
 import './Login.css';
 
@@ -42,10 +42,13 @@ export default function Login() {
 				localStorage.setItem('loginToken', res.data.result);
 				localStorage.setItem('isAuth', JSON.stringify(true));
 				localStorage.setItem('email', res.data.user.email);
-				dispatch(nameUpdate(res.data.user.name));
-				dispatch(emailUpdate(res.data.user.email));
-				dispatch(tokenUpdate(res.data.result));
-				dispatch(isAuthUpdate(true));
+				CheckMe()
+					.then((res) => {
+						dispatch(userUpdate(res.data));
+					})
+					.catch((err) => {
+						console.log(err);
+					});
 				navigate('/courses');
 			})
 			.catch((err) => {

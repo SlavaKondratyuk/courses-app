@@ -22,6 +22,7 @@ type CoursesProps = {
 export default function Courses(props: CoursesProps) {
 	const pageToShow = props.addCourse ? false : true;
 	const dispatch = useAppDispatch();
+	const role = useAppSelector((state) => state.user.role);
 	let fetchedCourses = useAppSelector<CourseInterface[]>(
 		(state) => state.courses.courses
 	);
@@ -34,9 +35,6 @@ export default function Courses(props: CoursesProps) {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		// if (!fetchedCourses.length) {
-		// 	dispatch(fetchCourses());
-		// }
 		if (!fetchedAuthors.length) {
 			dispatch(fetchAuthors());
 		}
@@ -71,7 +69,9 @@ export default function Courses(props: CoursesProps) {
 		<div className='courses'>
 			<div className='search-bar__wrapper'>
 				<SearchBar courses={courses} updateCoursesList={updateCoursesList} />
-				<Button name='Add New Course' clickHandler={coursesDisplayHandler} />
+				{role === 'admin' ? (
+					<Button name='Add New Course' clickHandler={coursesDisplayHandler} />
+				) : null}
 			</div>
 			{courses?.map((course) => (
 				<CourseCard
