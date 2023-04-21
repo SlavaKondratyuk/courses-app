@@ -1,13 +1,6 @@
 import './Logo.css';
+import logo from '../../../assets/images/banana.png';
 
-function Logo() {
-	return (
-		<img
-			className='logo'
-			src='../../../assets/images/banana.png'
-			alt='logoBanana'
-		/>
-	);
+export default function Logo() {
+	return <img className='logo' src={logo} alt='logo' />;
 }
-
-export default Logo;

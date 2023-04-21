@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useAppDispatch } from '../../store/hooks';
-import {
-	nameUpdate,
-	emailUpdate,
-	tokenUpdate,
-	userUpdate,
-} from '../../store/user/actionCreators';
+import { userUpdate } from '../../store/user/actionCreators';
 
 import Input from '../common/Input/Input';
 
@@ -26,7 +21,7 @@ export default function Login() {
 		if (isAuth) {
 			navigate('/courses');
 		}
-	}, []);
+	}, [navigate]);
 
 	async function onLogin(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
@@ -45,6 +40,7 @@ export default function Login() {
 				CheckMe()
 					.then((res) => {
 						dispatch(userUpdate(res.data));
+						localStorage.setItem('role', res.data.result.role);
 					})
 					.catch((err) => {
 						console.log(err);

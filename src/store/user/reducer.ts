@@ -2,11 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import { NameState } from './actionTypes';
 
 const initialState: NameState = {
-	name: 'Guest',
-	email: '',
-	token: '',
-	isAuth: false,
-	role: '',
+	name: localStorage.getItem('name') ?? 'Guest',
+	email: localStorage.getItem('email') ?? '',
+	token: localStorage.getItem('loginToken') ?? '',
+	isAuth: JSON.parse(localStorage.getItem('isAuth') || 'false'),
+	role: localStorage.getItem('role') ?? '',
 };
 
 export const userSlice = createSlice({
@@ -24,6 +24,9 @@ export const userSlice = createSlice({
 		},
 		isAuthUpdate: (state, action) => {
 			state.isAuth = action.payload;
+		},
+		setRole: (state, action) => {
+			state.role = action.payload;
 		},
 		userUpdate: (state, action) => {
 			state.name = action.payload.result.name;

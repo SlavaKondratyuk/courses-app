@@ -8,9 +8,6 @@ import Button from '../common/Button/Button';
 import { Author, CourseInterface } from '../interfaces/interfaces';
 
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import { addNewCourse } from '../../store/courses/actionCreators';
-import { addNewAuthor } from '../../store/authors/actionCreators';
-import { fetchCourses } from '../../store/courses/reducer';
 import { fetchAuthors } from '../../store/authors/reducer';
 
 import './Courses.css';

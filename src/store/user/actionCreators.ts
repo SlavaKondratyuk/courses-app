@@ -8,6 +8,7 @@ export const {
 	tokenUpdate,
 	isAuthUpdate,
 	userUpdate,
+	setRole,
 } = userSlice.actions;
 export const selectName = (state: RootState) => state.user.name;
 export const selectEmail = (state: RootState) => state.user.email;
