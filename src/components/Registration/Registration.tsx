@@ -28,7 +28,7 @@ export default function Registration() {
 
 		RegisterUser(newUser)
 			.then((res) => {
-				if (res.data.successful) {
+				if (res.status === 201) {
 					navigate('/login');
 				}
 			})

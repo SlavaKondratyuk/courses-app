@@ -14,11 +14,9 @@ import AuthorsList from './components/AddAuthor/AuthorsList';
 import CourseAuthors from './components/AddAuthor/CourseAuthors/CourseAuthors';
 
 import MinutesToHours from '../helpers/pipeDuration';
-import DateGenerator from '../helpers/dateGenerator.js';
 
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { addNewCourse, updateCourse } from '../../store/courses/actionCreators';
-import { addNewAuthor } from '../../store/authors/actionCreators';
 
 import {
 	AddNewCourse,
@@ -28,9 +26,8 @@ import {
 
 import './CourseForm.css';
 
-export default function CreateCourse() {
+export default function CourseForm() {
 	const { courseId } = useParams();
-	// debugger;
 	const dispatch = useAppDispatch();
 	const fetchedCourse = useAppSelector<CourseInterface | undefined>((state) =>
 		state.courses.courses.find((course) => course.id === courseId)
@@ -46,6 +43,26 @@ export default function CreateCourse() {
 	const [allAuthors, setAllAuthors] = useState<Author[] | []>([]);
 	const navigate = useNavigate();
 
+	const findCourseAuthors = useCallback(
+		(fetchedAuthors: Author[], fetchedCourse: CourseInterface) => {
+			const authors = fetchedAuthors.filter((author) =>
+				fetchedCourse?.authors.find((id) => id === author.id)
+			);
+			return authors;
+		},
+		[]
+	);
+
+	const filterUsedAuthorsFromAllAuthors = useCallback(
+		(fetchedAuthors: Author[], fetchedCourse: CourseInterface) => {
+			const authors = fetchedAuthors.filter(
+				(author) => !fetchedCourse?.authors.includes(author.id)
+			);
+			return authors;
+		},
+		[]
+	);
+
 	useEffect(() => {
 		setAllAuthors(fetchedAuthors);
 
@@ -53,27 +70,22 @@ export default function CreateCourse() {
 			setTitle(fetchedCourse.title);
 			setDescription(fetchedCourse.description);
 			setDuration(fetchedCourse.duration);
-			setCourseAuthors(findCourseAuthors());
-			setAllAuthors(filterUsedAuthorsFromAllAuthors());
+			setCourseAuthors(findCourseAuthors(fetchedAuthors, fetchedCourse));
+			setAllAuthors(
+				filterUsedAuthorsFromAllAuthors(fetchedAuthors, fetchedCourse)
+			);
 		}
-	}, [dispatch, fetchedAuthors]);
+	}, [
+		dispatch,
+		filterUsedAuthorsFromAllAuthors,
+		findCourseAuthors,
+		courseId,
+		fetchedAuthors,
+		fetchedCourse,
+	]);
 
 	function allDataFilled(): boolean {
 		return !!title && !!description && !!duration && courseAuthors.length > 0;
-	}
-
-	function findCourseAuthors(): Author[] {
-		const authors = fetchedAuthors.filter((author) =>
-			fetchedCourse?.authors.find((id) => id === author.id)
-		);
-		return authors;
-	}
-
-	function filterUsedAuthorsFromAllAuthors(): Author[] {
-		const authors = fetchedAuthors.filter(
-			(author) => !fetchedCourse?.authors.includes(author.id)
-		);
-		return authors;
 	}
 
 	function getNewCourseData(): NewCourseInterface {
@@ -88,15 +100,16 @@ export default function CreateCourse() {
 
 	const dispatchNewCourse = useCallback(
 		async (course: NewCourseInterface): Promise<void> => {
-			const response = await AddNewCourse(course);
-			if (response.data.successful) {
-				dispatch(addNewCourse(course));
-				navigate('/courses');
-			} else {
-				alert('Something went wrong');
-			}
+			await AddNewCourse(course).then((response) => {
+				if (response.successful) {
+					dispatch(addNewCourse(course));
+					navigate('/courses');
+				} else {
+					alert('Something went wrong');
+				}
+			});
 		},
-		[dispatch]
+		[dispatch, navigate]
 	);
 
 	function createCourse(): void {
@@ -137,8 +150,9 @@ export default function CreateCourse() {
 	const dispatchNewAuthor = useCallback(
 		async (author: Author): Promise<void> => {
 			const response = await AddNewAuthor(author);
-			if (response.data.successful) {
-				dispatch(addNewAuthor(author));
+			if (response.status === 200) {
+				dispatch(addNewCourse(author));
+				navigate('/courses');
 			} else {
 				alert('Something went wrong');
 			}
@@ -183,7 +197,7 @@ export default function CreateCourse() {
 		}
 		const updatedCourse = { ...getNewCourseData(), id: courseId };
 		UpdateCourseService(courseId, updatedCourse).then((data) => {
-			if (!data.data.successful) {
+			if (!data.successful) {
 				alert('Something went wrong');
 				return;
 			}

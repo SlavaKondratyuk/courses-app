@@ -14,7 +14,8 @@ export const fetchCourses = createAsyncThunk(
 	'courses/fetchCourses',
 	async () => {
 		const response = await GetCourses();
-		return response.data.result;
+		const jsonData = await response.json();
+		return jsonData;
 	}
 );
 
@@ -49,7 +50,7 @@ export const coursesSlice = createSlice({
 			state.loading = true;
 		});
 		builder.addCase(fetchCourses.fulfilled, (state, action) => {
-			state.courses = action.payload;
+			// state.courses = action.payload;
 			state.loading = false;
 			state.error = null;
 		});

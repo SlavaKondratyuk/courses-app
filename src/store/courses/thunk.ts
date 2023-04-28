@@ -1,20 +1,13 @@
 import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
-import { useNavigate } from 'react-router-dom';
 
 import { CourseStateInterface } from './actionTypes';
-import { NewCourseInterface } from '../../components/interfaces/interfaces';
-import {
-	addNewCourse,
-	deleteCourse,
-	initialiseCourses,
-	coursesLoaded,
-} from './actionCreators';
+import { initialiseCourses, coursesLoaded } from './actionCreators';
 
 import { CourseInterface } from '../../components/interfaces/interfaces';
 import { RootState } from '../store';
 
-import { AddNewCourse, GetCourses } from '../../services';
+import { GetCourses } from '../../services';
 
 // Fetch courses from server
 export const fetchCoursesThunk =
@@ -24,7 +17,7 @@ export const fetchCoursesThunk =
 		try {
 			if (!coursesState.courses.loaded) {
 				const courses = await GetCourses();
-				dispatch(initialiseCourses(courses.data.result));
+				dispatch(initialiseCourses(courses.result));
 				dispatch(coursesLoaded());
 			}
 		} catch (error) {

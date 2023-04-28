@@ -31,16 +31,19 @@ export default function Login() {
 			password,
 		};
 
-		LoginUser(usVer)
+		// const result: any;
+
+		await LoginUser(usVer)
 			.then((res) => {
-				localStorage.setItem('name', res.data.user.name);
-				localStorage.setItem('loginToken', res.data.result);
+				console.log(res);
+				localStorage.setItem('name', res.user.name);
+				localStorage.setItem('loginToken', res.result);
 				localStorage.setItem('isAuth', JSON.stringify(true));
-				localStorage.setItem('email', res.data.user.email);
+				localStorage.setItem('email', res.user.email);
 				CheckMe()
 					.then((res) => {
-						dispatch(userUpdate(res.data));
-						localStorage.setItem('role', res.data.result.role);
+						dispatch(userUpdate(res.result));
+						localStorage.setItem('role', res.result.role);
 					})
 					.catch((err) => {
 						console.log(err);

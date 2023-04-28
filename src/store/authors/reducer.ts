@@ -13,7 +13,9 @@ export const fetchAuthors = createAsyncThunk(
 	'authors/fetchAuthors',
 	async () => {
 		const response = await GetAuthors();
-		return response.data.result;
+		const jsonData = await response.result;
+		console.log(jsonData);
+		return jsonData;
 	}
 );
 

@@ -1,10 +1,8 @@
-import axios from 'axios';
-
 const methods = {
-	get: 'get',
-	post: 'post',
-	put: 'put',
-	delete: 'delete',
+	get: 'GET',
+	post: 'POST',
+	put: 'PUT',
+	delete: 'DELETE',
 };
 
 const api = {
@@ -21,93 +19,95 @@ const api = {
 const url = 'http://localhost:4000';
 
 export async function LoginUser(loginData) {
-	return await axios({
+	const response = await fetch(url + api.login, {
 		method: methods.post,
-		url: url + api.login,
-		data: JSON.stringify(loginData),
+		body: JSON.stringify(loginData),
 		headers: {
 			'Content-Type': 'application/json',
 		},
 	});
+	return response.json();
 }
 
 export async function RegisterUser(registerData) {
-	return await axios({
+	const response = await fetch(url + api.register, {
 		method: methods.post,
-		url: url + api.register,
-		data: JSON.stringify(registerData),
+		body: JSON.stringify(registerData),
 		headers: {
 			'Content-Type': 'application/json',
 		},
 	});
+	return response.json();
 }
 
 export async function GetCourses() {
-	return await axios({
+	const response = await fetch(url + api.courses, {
 		method: methods.get,
-		url: url + api.courses,
 	});
+	return response.json();
 }
 
 export async function GetAuthors() {
-	return await axios({
+	const response = await fetch(url + api.authors, {
 		method: methods.get,
-		url: url + api.authors,
 	});
+	return response.json();
 }
 
-export function AddNewCourse(courseData) {
-	return axios({
+export async function AddNewCourse(courseData) {
+	const response = await fetch(url + api.addNewCourse, {
 		method: methods.post,
-		url: url + api.addNewCourse,
-		data: courseData,
-		headers: {
-			Authorization: localStorage.getItem('loginToken'),
-		},
-	});
-}
-
-export function AddNewAuthor(authorData) {
-	return axios({
-		method: methods.post,
-		url: url + api.addNewAuthor,
-		data: JSON.stringify(authorData),
+		body: JSON.stringify(courseData),
 		headers: {
 			'Content-Type': 'application/json',
 			Authorization: localStorage.getItem('loginToken'),
 		},
 	});
+	return response.json();
 }
 
-export function UpdateCourseService(courseId, courseData) {
-	return axios({
+export async function AddNewAuthor(authorData) {
+	const response = await fetch(url + api.addNewAuthor, {
+		method: methods.post,
+		body: JSON.stringify(authorData),
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: localStorage.getItem('loginToken'),
+		},
+	});
+	return response.json();
+}
+
+export async function UpdateCourseService(courseId, courseData) {
+	const response = await fetch(url + api.update + courseId, {
 		method: methods.put,
-		url: url + api.update + courseId,
-		data: courseData,
+		body: JSON.stringify(courseData),
 		headers: {
+			'Content-Type': 'application/json',
 			Authorization: localStorage.getItem('loginToken'),
 		},
 	});
+	return response.json();
 }
 
-export function DeleteCourseService(courseId) {
-	return axios({
+export async function DeleteCourseService(courseId) {
+	const response = await fetch(url + api.update + courseId, {
 		method: methods.delete,
-		url: url + api.update + courseId,
 		headers: {
 			Authorization: localStorage.getItem('loginToken'),
 		},
 	});
+	return response.json();
 }
 
-export function CheckMe() {
+export async function CheckMe() {
 	const token = localStorage.getItem('loginToken');
-	return axios({
+	const response = await fetch(url + api.userMe, {
 		method: methods.get,
-		url: url + api.userMe,
 		headers: {
 			'Content-Type': 'application/json',
 			Authorization: token,
 		},
 	});
+	return response.json();
 }

@@ -45,7 +45,7 @@ function CourseCard(props: CourseCardProps) {
 
 	function deleteCourseFromServer(): void {
 		DeleteCourseService(id).then((res) => {
-			if (res.status === 200) {
+			if (res.successful) {
 				dispatch(deleteCourse(id));
 				alert('Course deleted');
 			}
